@@ -1,14 +1,13 @@
 import Link from "next/link";
 
-import { LatestPost } from "~/app/_components/post";
-import { api, HydrateClient } from "~/trpc/server";
+import { Title } from "./_components/ui/title";
 
-export default async function Home() {
+export default async function Page() {
 
 
   return (
-    <div>
-      <h1>Buena suerte chicos</h1>
+    <div className="flex">
+      <Title>Bienvenido</Title>
     </div>
   );
 }

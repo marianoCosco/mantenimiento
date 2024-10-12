@@ -1,34 +1,27 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
-import { Table, relations } from "drizzle-orm";
-import {
-  bigint,
-  boolean,
-  index,
-  integer,
-  json,
-  real,
-  primaryKey,
-  timestamp,
-  varchar,
-  serial,
-} from "drizzle-orm/pg-core";
-import { columnId, createdAt, pgTable, updatedAt } from "./schema/utils";
+import { relations, sql } from "drizzle-orm";
+import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
 
-export const equipos = pgTable(
-  "equipos",
+export const createTable = sqliteTableCreator((name) => `qr-code_${name}`);
+
+export const equipos = createTable(
+  "tareas",
   {
-    id: columnId,
-    name: varchar("name", { length: 256 }),
-    qr_code: varchar("qr_code"),
-    state: varchar("state"),
-    last_work: varchar("last_work"),
-    numberId: integer("numberId"),
-    description: varchar("description"),
-    updatedAt: updatedAt,
-    createdAt: createdAt,
+    id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    title: text("title", { length: 256 }),
+    grupoid: int("grupoid"),
+    participantesid: int("participantesid"),
+    description: text("description", { length: 256 }),
+    fecha: int("fecha", { mode: "timestamp" }),
+    createdAt: int("created_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .notNull(),
+    updatedAt: int("updated_at", { mode: "timestamp" }).$onUpdate(
+      () => new Date(),
+    ),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
+    nameIndex: index("name_idx").on(example.title),
   }),
 );
