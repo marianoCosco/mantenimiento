@@ -105,6 +105,8 @@ export const events = createTable(
     intervencionId: text("intervencion_id"), 
     type: text("type"),
     description: text("description"),
+    createdAt: int("created_at", { mode: "timestamp" }).defaultNow(),
+    updatedAt: int("updated_at", { mode: "timestamp" }).$onUpdate(() => new Date()),
   }
 );
 

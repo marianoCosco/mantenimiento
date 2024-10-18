@@ -9,13 +9,15 @@ import { nanoid } from "nanoid";
 create
 list
 get
-upload
+upload (se llama update)
 delete
 */
 export const equiposRouter = createTRPCRouter({
+  // create
   create: publicProcedure
     .input(
       z.object({
+        id: z.string(),
         name: z.string(),
         qr_code: z.string(),
         state: z.string(),
@@ -29,26 +31,16 @@ export const equiposRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const [respuesta] = await ctx.db
         .insert(equipos)
-        .values({
-          id: nanoid(),
-          name: input.name,
-          qr_code: input.qr_code,
-          state: input.state,
-          last_work: input.last_work,
-          numberId: input.numberId,
-          description: input.description,
-          createdAt: input.createdAt,
-          updatedAt: input.updatedAt,
-        })
+        .values(input)
         .returning();
 
       if (!respuesta) {
         throw new Error("Error al crear equipo");
       }
 
-      return respuesta; // Devolver el equipo creado
+      return respuesta; 
     }),
-
+      // get
   get: publicProcedure
     .input(
       z.object({
@@ -66,26 +58,12 @@ export const equiposRouter = createTRPCRouter({
 
       return equipo;
     }),
-  //   /*
-  // getByGrupoId: publicProcedure
-  //   .input(
-  //     z.object({
-  //       grupoId: z.string(),
-  //     }),
-  //   )
-  //   .query(async ({ input, ctx }) => {
-  //     const equipo = await ctx.db.query.equipos.findMany({
-  //       where: eq(equipos?.grupoid, input.grupoId),
-  //     });
-
-  //     return equipo;
-  //   }),
-  //   */
+    //  list
   list: publicProcedure.query(async ({ ctx }) => {
     const equipos = await ctx.db.query.equipos.findMany();
     return equipos;
   }),
-
+    // update
   update: publicProcedure
     .input(
       z.object({
@@ -123,7 +101,7 @@ export const equiposRouter = createTRPCRouter({
 
       return updatedequipo;
     }),
-
+      // delete
   delete: publicProcedure
     .input(
       z.object({
