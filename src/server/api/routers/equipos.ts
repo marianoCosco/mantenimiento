@@ -17,7 +17,6 @@ export const equiposRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        id: z.string(),
         name: z.string(),
         qr_code: z.string(),
         state: z.string(),

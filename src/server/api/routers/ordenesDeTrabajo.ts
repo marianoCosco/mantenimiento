@@ -18,7 +18,6 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
     create: publicProcedure
     .input(
         z.object({
-            id: z.string(),
             equipoId: z.string(),
             userId: z.string(),
             title: z.string(),
@@ -27,7 +26,7 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
             createdAt: z.date(),
             fechaProgramada: z.date(),
             fechaFinalizado: z.date(),
-            estado: z.string(),
+            estado: z.enum(["pendiente","en proceso", "completada", "cancelada"]),
         })
     )
     .mutation(async ({ ctx, input }) => {
@@ -35,12 +34,10 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         .insert(ordenesTrabajo)
         .values(input)
         .returning();
-
         if (!respuesta) {
-            return null;
-        }
-
-        return respuesta; // Devolver el equipo creado    
+            throw new Error("Error al crear equipo");
+        }    
+        return respuesta; 
     }),
         //list
     list: publicProcedure

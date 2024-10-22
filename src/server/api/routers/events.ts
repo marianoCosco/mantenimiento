@@ -16,7 +16,6 @@ export const eventsRouter = createTRPCRouter({
 create: publicProcedure 
 .input(
     z.object({
-        id: z.string(),
         equipoId: z.string(),
         reportId: z.string(),
         otid: z.string(),
@@ -39,14 +38,11 @@ create: publicProcedure
 }),
     // get
 get: publicProcedure
-.input(
-    z.object({
-        id: z.number(),
-    }),
-)
 .query(async ({ ctx }) => {
-    const events = await ctx.db.query.events.findMany();
+    const events = await ctx.db.query.events.findMany()
     return events
 })
+
+
 
 })

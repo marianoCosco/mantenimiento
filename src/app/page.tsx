@@ -1,14 +1,26 @@
+"use client"
+
 import Link from "next/link";
+export default function Home() {
 
-import { LatestPost } from "~/app/_components/post";
-import { api, HydrateClient } from "~/trpc/server";
-
-export default async function Home() {
-
-
-  return (
+return (
     <div>
-      <h1>Buena suerte chicos</h1>
+      <div> hola maxi</div>
+      <div> 
+        <Link href="/equipos">equipos</Link>
+      </div>
+      <div>
+        <Link href="/events">events</Link>
+      </div>
+      <div> 
+        <Link href="/images">images</Link>
+      </div>
+      <div>
+        <Link href="/ordenesDeTrabajo">ordenesDeTrabajo</Link>
+      </div>
+      <div>
+        <Link href="/reportes">reportes</Link>
+      </div>
     </div>
   );
 }
