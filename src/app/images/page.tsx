@@ -3,16 +3,19 @@
 import { api } from "~/trpc/react";
 
 export default function Page() {
-    const { data: images } = api.images.getByTeamId.useMutation();
+    const { data: images } = api.images.list.useQuery();
     const { mutateAsync: createImage } = api.images.create.useMutation();
     const { mutateAsync: deleteImage } = api.images.delete.useMutation();
-
+    const { data: equipos } = api.equipos.list.useQuery();
+    
     async function creacion() {
-        await createImage({
-            equipo_id: "1",
-            url: "1",
-            createdAt: new Date(),
-        });
+        if(equipos){
+            await createImage({
+                equipo_id: equipos[0]?.id ?? "",
+                url: "1",
+                createdAt: new Date(),
+            });
+        }
     }
     async function deletes(id: string) {
         await deleteImage({

@@ -9,6 +9,7 @@ import { report } from "process";
 
 /*
 create
+list
 get
 */
 export const eventsRouter = createTRPCRouter({
@@ -16,10 +17,10 @@ export const eventsRouter = createTRPCRouter({
 create: publicProcedure 
 .input(
     z.object({
-        equipoId: z.string(),
-        reportId: z.string(),
-        otid: z.string(),
-        intervencionId: z.string(),
+        equipo_id: z.string(),
+        report_id: z.string(),
+        ot_id: z.string(),
+        intervencion_id: z.string(),
         type: z.string(),
         description: z.string(),
         createdAt: z.date(),
@@ -36,8 +37,8 @@ create: publicProcedure
     }
     return event
 }),
-    // get
-get: publicProcedure
+    // list
+list: publicProcedure
 .query(async ({ ctx }) => {
     const events = await ctx.db.query.events.findMany()
     return events

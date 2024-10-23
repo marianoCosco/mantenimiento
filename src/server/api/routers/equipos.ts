@@ -13,7 +13,7 @@ upload (se llama update)
 delete
 */
 export const equiposRouter = createTRPCRouter({
-  // create
+  // create FUNCIONA
   create: publicProcedure
     .input(
       z.object({
@@ -39,7 +39,7 @@ export const equiposRouter = createTRPCRouter({
 
       return respuesta; 
     }),
-      // get
+      // get PROBAR
   get: publicProcedure
     .input(
       z.object({
@@ -57,12 +57,12 @@ export const equiposRouter = createTRPCRouter({
 
       return equipo;
     }),
-    //  list
+    //  list FUNCIONA
   list: publicProcedure.query(async ({ ctx }) => {
     const equipos = await ctx.db.query.equipos.findMany();
     return equipos;
   }),
-    // update
+    // update FUNCIONA
   update: publicProcedure
     .input(
       z.object({
@@ -100,7 +100,7 @@ export const equiposRouter = createTRPCRouter({
 
       return updatedequipo;
     }),
-      // delete
+      // delete FUNCIONA
   delete: publicProcedure
     .input(
       z.object({
@@ -111,7 +111,6 @@ export const equiposRouter = createTRPCRouter({
       const deletedequipo = await ctx.db
         .delete(equipos)
         .where(eq(equipos.id, input.id))
-        .returning();
 
       if (!deletedequipo) {
         throw new Error("Error al eliminar el equipo");

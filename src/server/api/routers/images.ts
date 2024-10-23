@@ -9,7 +9,7 @@ import { create } from "domain";
 import { url } from "inspector";
 /*
 create
-getByTeamId
+list
 delete
 */
 export const imageRouter = createTRPCRouter({
@@ -32,28 +32,11 @@ export const imageRouter = createTRPCRouter({
         }
         return image;
     }),
-        //getByTeamId
-    getByTeamId: publicProcedure
-    .input(
-        z.object({
-            equipo_id: z.string(),
-            url: z.string(),
-            createdAt: z.string(),
-        })
-    )
-    .mutation(async ({ctx, input}) =>{
-        const image = await ctx.db
-        .insert(images)
-        .values({
-            equipo_id: input.equipo_id,
-            url: input.url,
-            createdAt: new Date(),
-        })
-        .returning();
-        if (!image) {
-            return null;
-        }
-        return image;
+        //list
+    list: publicProcedure
+    .query(async({ ctx}) => {
+        const images = await ctx.db.query.images.findMany();
+        return images
     }),
         //delete
     delete: publicProcedure

@@ -8,9 +8,9 @@ export default function Page() {
 
     async function crear() {
         await createReporte({
-            equipoId: "1",
-            userId: "1",
-            tipoReporte: "intervencion realizada",
+            equipo_id: "1",
+            user_id: "1",
+            tipo_reporte: "intervencion realizada",
             description: "1",
             createdAt: new Date(),
             periodo: "semanal",

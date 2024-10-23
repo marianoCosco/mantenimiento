@@ -122,7 +122,7 @@ export const equipoUsuarios = createTable(
   }
 );
 
-
+// muchas ordenes de trabajo
 export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one }) => ({
   ordenTrabajo: one(ordenesTrabajo, {
     fields: [ordenesTrabajo.id], 
