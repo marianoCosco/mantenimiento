@@ -1,27 +1,26 @@
 import { eq } from "drizzle-orm";
-import { number, z } from "zod";
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { equipos, reportes } from "~/server/db/schema";
-import { updatedAt } from "~/server/db/schema/utils";
-import { nanoid } from "nanoid";
+import { reportes } from "~/server/db/schema";
+
 /*
-create
-list
-get
-getByTeam
-upload
-delete
+create FUNCIONA
+list FUNCIONA
+get PROBAR
+getByTeam PROBAR
+upload FUNCIONA
+delete FUNCIONA
 */
 export const reportesRouter = createTRPCRouter({
-        //create
+        //create FUNCIONA
     create: publicProcedure
     .input(
         z.object({
             equipo_id: z.string(),
             user_id: z.string(),
             tipo_reporte: z.enum(["intervencion realizada","estado del equipo"]),
-            description: z.string(),
+            descripcion: z.string(),
             createdAt: z.date(),
             periodo: z.enum(["semanal","mensual","anual"]),
         })
@@ -36,14 +35,14 @@ export const reportesRouter = createTRPCRouter({
         }
         return reporte;
     }),
-        //list
+        //list FUNCIONA
     list: publicProcedure
     .query(async () => {
         const reportes = await db.query.reportes.findMany()
 
         return reportes
     }),
-        //get
+        //get PROBAR
     get: publicProcedure
     .input(
         z.object({
@@ -57,7 +56,7 @@ export const reportesRouter = createTRPCRouter({
         }) 
         return reporte
     }),
-        //getByTeam
+        //getByTeam PROBAR
     getByTeam: publicProcedure
     .input(
         z.object({
@@ -70,7 +69,7 @@ export const reportesRouter = createTRPCRouter({
         })
         return reporte
     }),
-        //upload
+        //upload FUNCIONA
     upload: publicProcedure
     .input(
         z.object({
@@ -78,7 +77,7 @@ export const reportesRouter = createTRPCRouter({
             equipoId: z.string(),
             userId: z.string(),
             tipoReporte: z.enum(["intervencion realizada","estado del equipo"]),
-            description: z.string(),
+            descripcion: z.string(),
             createdAt: z.date(),
             periodo: z.enum(["semanal","mensual","anual"]),
         })
@@ -91,7 +90,7 @@ export const reportesRouter = createTRPCRouter({
             equipo_id: input.equipoId,
             userId: input.userId,
             tipo_reporte: input.tipoReporte,
-            descripcion: input.description,
+            descripcion: input.descripcion,
             createdAt: input.createdAt,
             periodo: input.periodo,
     })
@@ -102,7 +101,7 @@ export const reportesRouter = createTRPCRouter({
         }
         return reporteActualizado;
     }),
-        //delete
+        //delete FUNCIONA
     delete: publicProcedure
     .input(
         z.object({
