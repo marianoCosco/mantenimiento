@@ -1,16 +1,13 @@
 import { eq } from "drizzle-orm";
-import { number, z } from "zod";
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { db } from "~/server/db";
 import { equipos } from "~/server/db/schema";
-import { updatedAt } from "~/server/db/schema/utils";
-import { nanoid } from "nanoid";
 /*
-create
-list
-get
-upload (se llama update)
-delete
+create FUNCIONA
+list FUNCIONA
+get PROBAR
+upload (se llama update) FUNCIONA
+delete FUNCIONA
 */
 export const equiposRouter = createTRPCRouter({
   // create FUNCIONA

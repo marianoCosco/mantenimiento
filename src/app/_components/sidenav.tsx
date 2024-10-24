@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { useState } from "react";
 export default function Sidenav() {
     const listaDeStrings = [
         { esp: "equipos", eng: "equipos" },
         { esp: "events", eng: "events" },
         { esp: "images", eng: "images" },
         { esp: "ordenesDeTrabajo", eng: "ordenesDeTrabajo"},
-        { esp: "reportes", eng: "reportes"}
+        { esp: "reportes", eng: "reportes"},
+        { esp: "usuarios", eng: "usuarios" },
+        { esp: "intervenciones", eng: "intervenciones" },
     ];
 
     return (

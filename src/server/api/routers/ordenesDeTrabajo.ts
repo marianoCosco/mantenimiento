@@ -1,18 +1,15 @@
 import { eq } from "drizzle-orm";
-import { number, z } from "zod";
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { ordenesTrabajo } from "~/server/db/schema";
-import { updatedAt } from "~/server/db/schema/utils";
-import { nanoid } from "nanoid";
-import { get } from "http";
 /*
-create 
-list 
-get
-getByTeam
-upload
-delete
+create FUNCIONA
+list FUNCIONA
+get PROBAR
+getByTeam PROBAR
+upload FUNCIONA
+delete FUNCIONA
 */
 export const ordenesDeTrabajoRouter = createTRPCRouter({
         //create
@@ -20,33 +17,23 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
     .input(
         z.object({
             equipo_id: z.string(),
-            user_id: z.string(),
+            userId: z.string(),
             title: z.string(),
-            description: z.string(),
-            additionarl_info: z.string(),
+            descripcion: z.string(),
+            additional_info: z.string(),
             createdAt: z.date(),
             fecha_programada: z.date(),
-            fecha_finalizado: z.date(),
+            fecha_finalizacion: z.date(),
             estado: z.enum(["pendiente","en proceso", "completada", "cancelada"]),
         })
     )
     .mutation(async ({ ctx, input }) => {
         const [respuesta] = await ctx.db
         .insert(ordenesTrabajo)
-        .values({
-            equipo_id: input.equipo_id,
-            userId: input.user_id,
-            title: input.title,
-            description: input.description,
-            additional_info: input.additionarl_info,
-            createdAt: input.createdAt,
-            fecha_programada: input.fecha_programada,
-            fecha_finalizado: input.fecha_finalizado,
-            estado: input.estado
-        })
+        .values(input)
         .returning();
         if (!respuesta) {
-            throw new Error("Error al crear equipo");
+            throw new Error("Error al crear la orden de trabajo");
         }    
         return respuesta; 
     }),
@@ -83,19 +70,19 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         })
         return respuesta
     }),
-        //upload
+        //upload FUNCIONA
     upload: publicProcedure
     .input(
         z.object({
             id: z.string(),
             equipo_id: z.string(),
-            user_id: z.string(),
+            userId: z.string(),
             title: z.string(),
-            description: z.string(),
-            additionarl_info: z.string(),
+            descripcion: z.string(),
+            additional_info: z.string(),
             createdAt: z.date(),
             fecha_programada: z.date(),
-            fecha_finalizado: z.date(),
+            fecha_finalizacion: z.date(),
             estado: z.enum(["pendiente","en proceso", "completada", "cancelada"]),
         })
     )
@@ -105,13 +92,13 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         .set({
             id: input.id,
             equipo_id: input.equipo_id,
-            userId: input.user_id,
+            userId: input.userId,
             title: input.title,
-            descripcion: input.description,
-            additional_info: input.additionarl_info,
+            descripcion: input.descripcion,
+            additional_info: input.additional_info,
             createdAt: input.createdAt,
             fecha_programada: input.fecha_programada,
-            fecha_finalizacion: input.fecha_finalizado,
+            fecha_finalizacion: input.fecha_finalizacion,
             estado: input.estado
         })
         .where(eq(ordenesTrabajo.id, input.id))
@@ -121,7 +108,7 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         }
         return ordenActualizada;
     }),
-        //delete
+        //delete FUNCIONA
     delete: publicProcedure
     .input(
         z.object({

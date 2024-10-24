@@ -4,7 +4,9 @@ import { eventsRouter } from "./routers/events";
 import { imageRouter } from "./routers/images";
 import { ordenesDeTrabajoRouter } from "./routers/ordenesDeTrabajo";
 import { reportesRouter } from "./routers/reportes";
-
+import { intervencionesRouter } from "./routers/intervenciones";
+import { equipoUsuariosRouter } from "./routers/equiposUsuarios";
+import { usuariosRouter } from "./routers/usuarios";
 /**
  * This is the primary router for your server.
  *
@@ -15,7 +17,10 @@ export const appRouter = createTRPCRouter({
   events: eventsRouter,
   images: imageRouter,
   ordenesDeTrabajo: ordenesDeTrabajoRouter,
-  reportes: reportesRouter
+  reportes: reportesRouter,
+  intervenciones: intervencionesRouter,
+  usuarios: usuariosRouter,
+  gruposUsuarios: equipoUsuariosRouter,
 });
 
 // export type definition of API

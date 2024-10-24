@@ -14,6 +14,7 @@ export default function Page() {
     const { mutateAsync: upload } = api.ordenesDeTrabajo.upload.useMutation();
     const { mutateAsync: deleteOrdenDeTrabajo } = api.ordenesDeTrabajo.delete.useMutation();
     const { data: equipos } = api.equipos.list.useQuery()
+    const { data: users } = api.usuarios.list.useQuery()
 
 
     const handleSubmit = () => {
@@ -22,37 +23,39 @@ export default function Page() {
         setSelectedId(id); 
       };
     async function crear() {
-        if(equipos){
+        if(equipos && users) {
             await createOrdenDeTrabajo({
                 equipo_id: equipos[0]?.id ?? "",
-                user_id: "1",
+                userId: users[0]?.id ?? "",
                 title: "1",
-                description: "1",
-                additionarl_info: "1",
+                descripcion: "1",
+                additional_info: "1",
                 createdAt: new Date(),
                 fecha_programada: new Date(),
-                fecha_finalizado: new Date(),
+                fecha_finalizacion: new Date(),
                 estado: "en proceso",
             });
         }
     }
     
-    async function editar() {
-        await upload({
-            id: "1",
-            equipo_id: "1",
-            user_id: "1",
-            title: "1",
-            description: "1",
-            additionarl_info: "1",
-            createdAt: new Date(),
-            fecha_programada: new Date(),
-            fecha_finalizado: new Date(),
-            estado: "en proceso",
-        });
+    async function editar(id: string) {
+        if(equipos && users) {
+            await upload({
+                id: id,
+                equipo_id: equipos[0]?.id ?? "",
+                userId: users[0]?.id ?? "",
+                title: "2",
+                descripcion: "1",
+                additional_info: "1",
+                createdAt: new Date(),
+                fecha_programada: new Date(),
+                fecha_finalizacion: new Date(),
+                estado: "en proceso",
+            });
+        }
     }
-    async function borrar() {
-        await deleteOrdenDeTrabajo({ id: "1" });
+    async function borrar(id: string) {
+        await deleteOrdenDeTrabajo({ id });
     }
     return (
         <div>
@@ -61,15 +64,12 @@ export default function Page() {
                 {ordenesDeTrabajo? ordenesDeTrabajo?.map((odt) => (
                     <div key={odt.id}>
                         <p>id: {odt.id}</p>
+                        <p>title: {odt.title}</p>
+                        <button onClick={() => editar(odt.id)}>Editar ordenes de trabajo</button>
+                        <button onClick={() => borrar(odt.id)}>borrar ordenes de trabajo</button>
                     </div>
                 )): <h1>no existen imagenes</h1>}
                 <button onClick={crear}>Crear ordenes de trabajo</button>
-            </div>
-            <div>
-                <button onClick={editar}>Editar ordenes de trabajo</button>
-            </div>
-            <div>
-                <button onClick={borrar}>borrar ordenes de trabajo</button>
             </div>
             <div>
                 <input

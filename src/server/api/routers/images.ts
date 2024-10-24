@@ -1,19 +1,14 @@
 import { eq } from "drizzle-orm";
-import { number, z } from "zod";
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { db } from "~/server/db";
 import { images } from "~/server/db/schema";
-import { updatedAt } from "~/server/db/schema/utils";
-import { nanoid } from "nanoid";
-import { create } from "domain";
-import { url } from "inspector";
 /*
-create
-list
-delete
+create FUNCIONA
+list FUNCIONA
+delete FUNCIONA
 */
 export const imageRouter = createTRPCRouter({
-        // create
+        // create FUNCIONA
     create: publicProcedure
     .input(
         z.object({
@@ -32,13 +27,13 @@ export const imageRouter = createTRPCRouter({
         }
         return image;
     }),
-        //list
+        //list FUNCIONA
     list: publicProcedure
     .query(async({ ctx}) => {
         const images = await ctx.db.query.images.findMany();
         return images
     }),
-        //delete
+        //delete FUNCIONA
     delete: publicProcedure
     .input(
         z.object({
