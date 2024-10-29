@@ -1,7 +1,24 @@
 "use client";
 
+
+
+
+
+
+
+
+
+
+
+
 interface usuario {
     id: string;
+    nombre: string  | null;
+    legajo: string | null;
+    email: string | null;
+    telefono: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
 }
 
 export default function UsuariosPage(props: {params: { usuarioId: usuario }}) {
