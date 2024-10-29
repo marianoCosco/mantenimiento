@@ -33,7 +33,7 @@ export const intervencionesRouter = createTRPCRouter({
 
       return respuesta; 
     }),
-      // get 
+      // get FUNCIONA
   get: publicProcedure
     .input(
       z.object({
@@ -41,7 +41,7 @@ export const intervencionesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      const intervencion = await ctx.db.query.equipos.findFirst({
+      const intervencion = await ctx.db.query.intervenciones.findFirst({
         where: eq(intervenciones.id, input.id),
       });
 
@@ -83,7 +83,7 @@ export const intervencionesRouter = createTRPCRouter({
         .returning();
 
       if (!updatedIntervencion) {
-        throw new Error("Error al actualizar el equipo");
+        throw new Error("Error al actualizar la intervencion");
       }
 
       return updatedIntervencion;

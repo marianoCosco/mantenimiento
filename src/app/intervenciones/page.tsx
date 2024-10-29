@@ -45,8 +45,11 @@ export default function Page() {
                     <div key={intervencion.id}>
                         <p>id: {intervencion.id}</p>
                         <p>descripcion: {intervencion.descripcion}</p>
-                        <button onClick={() => deletes(intervencion.id)}>Delete</button>
-                        <button onClick={() => updates(intervencion.id)}>Update</button>
+                        <div className="flex gap-3">
+                            <button onClick={() => deletes(intervencion.id)}>Delete</button>
+                            <button onClick={() => updates(intervencion.id)}>Update</button>
+                            <button onClick={() => window.location.href = `/intervenciones/${intervencion.id}`}>ver intervencion</button>
+                        </div>
                     </div>
                 )): <h1>no existen intervenciones</h1>}
             </div>
