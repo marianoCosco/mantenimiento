@@ -5,8 +5,8 @@ interface grupo {
     equipo_id: string | null;
     usuario_id: string | null;
 } 
-export default function GruposUsuariosPage(props: { params: { grupoUsuario: grupo } }) {
-    const gruposUsuarios  = props.params.grupoUsuario;
+export default function GruposUsuariosPage(props: { params: { gruposUsuariosId: grupo } }) {
+    const gruposUsuarios  = props.params.gruposUsuariosId;
 
 
 

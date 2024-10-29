@@ -54,9 +54,12 @@ export default function Page() {
                 {events? events?.map((event) =>(
                     <div key={event.id}>
                         <p>id: {event.description}</p>
-                        <button onClick={() => deletes(event.id)}>Delete</button>
-                        <button onClick={() => updates(event.id)}>Update</button>
+                        <div className="flex gap-3">
+                            <button onClick={() => deletes(event.id)}>Delete</button>
+                            <button onClick={() => updates(event.id)}>Update</button>
+                            <button onClick={() => window.location.href = `/events/${event.id}`} >ver evento</button>
                         </div>
+                    </div>
                         )): "no existen eventos"}
             </div>
             <button onClick={creacion}>Crear Evento</button>

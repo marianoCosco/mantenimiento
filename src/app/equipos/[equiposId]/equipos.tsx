@@ -1,24 +1,22 @@
 "use client";
 
-interface grupo {
+interface equipo {
     id: string;
-    name: string;
-    qr_code: string;
-    state: string;
-    last_work: Date;
-    numberId: number;
-    description: string;
+    name: string | null;
+    qr_code: string | null;
+    state: string  | null;
+    last_work: Date | null;
+    numberId: number | null;
+    description: string | null;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: Date | null;
 } 
-export default function GruposPage(props: { params: { grupo: grupo } }) {
-    const grupo  = props.params.grupo;
-
-
+export default function GruposPage(props: { params: { equipo: equipo } }) {
+    const equipo  = props.params.equipo;
 
     return (
         <div>
-            <h1>{grupo?.name}</h1>
+            <h1>{equipo?.name}</h1>
             <p>idolo crack 5 palabras: crack</p>
         </div>
     )

@@ -1,13 +1,11 @@
 "use client"
 
 import { api } from "~/trpc/react"
-import { ListTile } from "../_components/ui/list"
 
 export default function Page() {
     const { data: equipos } = api.equipos.list.useQuery()
     const { mutateAsync: crearEquipo } = api.equipos.create.useMutation()
     const { mutateAsync: editarEquipo } = api.equipos.update.useMutation()
-    const { data: getEquipo } = api.equipos.get.useQuery({ id: "1" })
     const { mutateAsync: deleteEquipo } = api.equipos.delete.useMutation()
     async function creacion() {
         await crearEquipo({
@@ -47,9 +45,11 @@ export default function Page() {
                 {equipos? equipos?.map((equipo) => (
                     <div key={equipo.id}>
                         <p>{equipo.name}</p>
-                        <button onClick={() => editar(equipo.id)}>Editar</button>
-                        <button onClick={() => borrar(equipo.id)}>Borrar</button>
-                        <ListTile title= {"ver equipo"} href={`/equipos/${equipo.id}`} />   
+                        <div className="flex gap-3">
+                            <button onClick={() => editar(equipo.id)}>Editar</button>
+                            <button onClick={() => borrar(equipo.id)}>Borrar</button>
+                            <button onClick={() => window.location.href = `/equipos/${equipo.id}`} > ver equipo</button>
+                        </div>
                     </div>
                 )): <h1>No hay equipos</h1> }
                 <button onClick={() => creacion()}>Crear</button>

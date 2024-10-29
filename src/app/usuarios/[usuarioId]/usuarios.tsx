@@ -1,0 +1,18 @@
+"use client";
+
+interface usuario {
+    id: string;
+}
+
+export default function UsuariosPage(props: {params: { usuarioId: usuario }}) {
+    
+    const usuarioId = props.params.usuarioId;
+    
+    return (
+        <div>
+            
+            <h1>{usuarioId?.id}</h1>
+            <p>idolo crack 5 palabras: crack</p>
+        </div>
+    )
+}

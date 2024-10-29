@@ -4,16 +4,16 @@ import {api } from "~/trpc/react"
 
 import GruposPage from "./equipos"
 
-export default function GrupoPage(props: { params: { gruposId: string } }) {
+export default function GrupoPage(props: { params: { equiposId: string } }) {
 
-    const gruposId  =props.params.gruposId;
+    const equipoId  =props.params.equiposId;
 
-    const {data: grupo} = api.equipos.get.useQuery({id: gruposId});
-    console.log({algo:gruposId})
-    if(grupo) {
+    const {data: equipo} = api.equipos.get.useQuery({id: equipoId});
+    if(equipo) {
         return (
             <div>
-                <p>id: {grupo?.id}</p>
+                <p>id: {equipo?.id}</p>
+                <GruposPage params={{equipo: equipo}} />
             </div>
         )
     }

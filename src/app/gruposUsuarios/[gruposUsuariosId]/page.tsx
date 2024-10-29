@@ -15,7 +15,7 @@ export default function GrupoPage(props: { params: { gruposUsuariosId: string } 
         return (
             <div>
                 <p>id: {grupoUsuario?.id}</p>
-                <GruposUsuariosPage params={{grupoUsuario: grupoUsuario}}  />
+                <GruposUsuariosPage params={{gruposUsuariosId: grupoUsuario}}  />
             </div>
         )
     }
