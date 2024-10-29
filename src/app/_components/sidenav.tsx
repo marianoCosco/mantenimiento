@@ -4,10 +4,11 @@ export default function Sidenav() {
         { esp: "equipos", eng: "equipos" },
         { esp: "events", eng: "events" },
         { esp: "images", eng: "images" },
-        { esp: "ordenesDeTrabajo", eng: "ordenesDeTrabajo"},
+        { esp: "ordenes De Trabajo", eng: "ordenesDeTrabajo"},
         { esp: "reportes", eng: "reportes"},
         { esp: "usuarios", eng: "usuarios" },
         { esp: "intervenciones", eng: "intervenciones" },
+        { esp: "grupos de usuarios", eng: "gruposUsuarios" },
     ];
 
     return (
@@ -16,9 +17,9 @@ export default function Sidenav() {
             <div className="">
                 <ul className="m-5">
                     {listaDeStrings.map((item) => (
-                        <li key={item.esp} className="mt-5">
-                            <Link href={`/${item.esp}`}>
-                                <h1>{item.eng}</h1>
+                        <li key={item.eng} className="mt-5">
+                            <Link href={`/${item.eng}`}>
+                                <h1>{item.esp}</h1>
                             </Link>
                             <div className="h-4px w-full bg-black"></div>
                         </li>

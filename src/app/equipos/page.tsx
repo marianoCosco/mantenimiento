@@ -1,6 +1,7 @@
 "use client"
 
 import { api } from "~/trpc/react"
+import { ListTile } from "../_components/ui/list"
 
 export default function Page() {
     const { data: equipos } = api.equipos.list.useQuery()
@@ -48,6 +49,7 @@ export default function Page() {
                         <p>{equipo.name}</p>
                         <button onClick={() => editar(equipo.id)}>Editar</button>
                         <button onClick={() => borrar(equipo.id)}>Borrar</button>
+                        <ListTile title= {"ver equipo"} href={`/equipos/${equipo.id}`} />   
                     </div>
                 )): <h1>No hay equipos</h1> }
                 <button onClick={() => creacion()}>Crear</button>

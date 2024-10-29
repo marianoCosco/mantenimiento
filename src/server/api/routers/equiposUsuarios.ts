@@ -8,7 +8,7 @@ import { equipoUsuarios } from "~/server/db/schema";
 /*
 create FUNCIONA
 list FUNCIONA
-get PROBAR
+get FUNCIONA
 update FUNCIONA
 delete FUNCIONA
 */
@@ -38,7 +38,7 @@ export const equipoUsuariosRouter = createTRPCRouter({
         const equipoUsuarios = await ctx.db.query.equipoUsuarios.findMany();
         return equipoUsuarios;  
     }),
-    // get PROBAR
+    // get FUNCIONA
     get: publicProcedure
     .input(
         z.object({

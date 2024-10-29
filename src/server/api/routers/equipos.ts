@@ -47,11 +47,6 @@ export const equiposRouter = createTRPCRouter({
       const equipo = await ctx.db.query.equipos.findFirst({
         where: eq(equipos.id, input.id),
       });
-
-      if (!equipo) {
-        throw new Error("equipo no encontrado");
-      }
-
       return equipo;
     }),
     //  list FUNCIONA
