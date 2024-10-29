@@ -5,12 +5,23 @@ import { api } from "~/trpc/react";
 export default function Page() {
     const { data: images } = api.images.list.useQuery();
     const { mutateAsync: createImage } = api.images.create.useMutation();
+    const {mutateAsync: updateImage} = api.images.update.useMutation();
     const { mutateAsync: deleteImage } = api.images.delete.useMutation();
     const { data: equipos } = api.equipos.list.useQuery();
     
     async function creacion() {
         if(equipos){
             await createImage({
+                equipo_id: equipos[0]?.id ?? "",
+                url: "1",
+                createdAt: new Date(),
+            });
+        }
+    }
+    async function updates(id: string) {
+        if(equipos){
+            await updateImage({
+                id: id,
                 equipo_id: equipos[0]?.id ?? "",
                 url: "1",
                 createdAt: new Date(),
@@ -29,7 +40,11 @@ export default function Page() {
                 {images? images?.map((image) => (
                     <div key={image.id}>
                         <p>id: {image.id}</p>
-                        <button onClick={() => deletes(image.id)}>Delete</button>
+                        <div className="flex gap-3">
+                            <button onClick={() => deletes(image.id)}>Delete</button>
+                            <button onClick={() => updates(image.id)}>Update</button>
+                            <button onClick={() => window.location.href = `/images/${image.id}`}>ver imagen</button>
+                        </div>
                     </div>
                 )): <h1>no existen imagenes</h1>}
                 <button onClick={creacion}>Crear Imagen</button>
