@@ -1,7 +1,9 @@
 "use client"
 
 import { api } from "~/trpc/react";
-import { ListTile } from "../_components/ui/list";
+import { List, ListTile } from "../_components/ui/list";
+import { Button } from "../_components/ui/button";
+import { Trash2Icon } from "lucide-react";
 
 export default function Page() {
     const { data: usuarios } = api.usuarios.list.useQuery();
@@ -41,21 +43,33 @@ export default function Page() {
     
     return (
         <div>
-            <h1>Usuarios:</h1>
+            <h1 className="flex justify-center mt-10">Usuarios:</h1>
             <div>
-                {usuarios? usuarios?.map((usuario) => (
-                    <div key={usuario.id}>
-                        <p>nombre: {usuario.nombre}</p>
-                        <div className="flex gap-3">
-                        <button onClick={() => deletes(usuario.id)}>Delete</button>
-                        <button onClick={() => updates(usuario.id)}>Update</button>
-                        <button onClick={() => window.location.href = `/usuarios/${usuario.id}`}>ver usuario</button>
+                <List>
+                    {usuarios? usuarios?.map((usuario) => (
+                        <div className="border border-black p-10" key={usuario.id}>
+                            <p>nombre: {usuario.nombre}</p>
+                            <div className="flex gap-3">
+                            <Button onClick={() => updates(usuario.id)}>
+                                Actualizar
+                            </Button>
+                            <Button onClick={() => window.location.href = `/usuarios/${usuario.id}`}>
+                                ver usuario
+                            </Button>
+                            <Button onClick={() => deletes(usuario.id)}>
+                                <Trash2Icon />
+                            </Button>
+                            </div>
                         </div>
-                    </div>
-                )): <h1>no existen usuarios</h1>}
+                    )): <h1>no existen usuarios</h1>}
+                </List>
                 
             </div>
-            <button onClick={() => creates()}>Create</button>
+            <div className="flex justify-center p-10">
+                <Button onClick={() => creates()}>
+                    Crear usuario
+                </Button>
+            </div>
         </div>
     )
 }

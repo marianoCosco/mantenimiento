@@ -1,6 +1,9 @@
 "use client";
 
 import { api } from "~/trpc/react";
+import { Button } from "../_components/ui/button";
+import { List } from "../_components/ui/list";
+import { Trash2Icon } from "lucide-react";
 
 export default function Page() {
     const { data: images } = api.images.list.useQuery();
@@ -35,19 +38,31 @@ export default function Page() {
     }
     return (
         <div>
-            <h1>Images</h1>
+            <h1 className="flex justify-center mt-10">Images</h1>
             <div>
-                {images? images?.map((image) => (
-                    <div key={image.id}>
-                        <p>id: {image.id}</p>
-                        <div className="flex gap-3">
-                            <button onClick={() => deletes(image.id)}>Delete</button>
-                            <button onClick={() => updates(image.id)}>Update</button>
-                            <button onClick={() => window.location.href = `/images/${image.id}`}>ver imagen</button>
+                <List>
+                    {images? images?.map((image) => (
+                        <div className="border border-black p-10" key={image.id}>
+                            <p>id: {image.id}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => updates(image.id)}>
+                                Actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/images/${image.id}`}>
+                                    Ver imagen
+                                </Button>
+                                <Button onClick={() => deletes(image.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )): <h1>no existen imagenes</h1>}
-                <button onClick={creacion}>Crear Imagen</button>
+                    )): <h1>no existen imagenes</h1>}
+                </List>
+                <div className="flex justify-center p-10">
+                    <Button onClick={creacion}>
+                        Crear Imagen
+                    </Button>
+                </div>
             </div>
         </div>
     );

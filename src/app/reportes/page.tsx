@@ -1,6 +1,9 @@
 "use client";
 
+import { Trash2Icon } from "lucide-react";
 import { api } from "~/trpc/react";
+import { List } from "../_components/ui/list";
+import { Button } from "../_components/ui/button";
 
 export default function Page() {
     const { data: reportes } = api.reportes.list.useQuery();
@@ -21,6 +24,7 @@ export default function Page() {
             });
         }
     }
+
     async function borrar(id: string) {
         await deleteReporte({id: id});
     }
@@ -39,17 +43,32 @@ export default function Page() {
     }
     return (
         <div>
-            <h1>reportes</h1>
+            <h1 className="flex justify-center mt-10">Reportes</h1>
             <div>
-                {reportes? reportes?.map((reporte) => (
-                    <div key={reporte.id}>
-                        <p>id: {reporte.id}</p>
-                        <p>descripcion: {reporte.descripcion}</p>
-                        <button onClick={() => borrar(reporte.id)}>borrar</button>
-                        <button onClick={() => actualizar(reporte.id)}>actualizar</button>
-                    </div>
-                )): <h1>no existen reportes</h1>}
-                <button onClick={crear}>Crear reportes</button>
+                <List>
+                    {reportes? reportes?.map((reporte) => (
+                        <div className="border border-black p-10" key={reporte.id}>
+                            <p>id: {reporte.id}</p>
+                            <p>descripcion: {reporte.descripcion}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => actualizar(reporte.id)}>
+                                    actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/reportes/${reporte.id}`} >
+                                    ver reporte
+                                </Button>
+                                <Button onClick={() => borrar(reporte.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
+                        </div>
+                    )): <h1>no existen reportes</h1>}
+                </List>
+                <div className="flex justify-center p-10">
+                    <Button className="flex" onClick={crear}>
+                        Crear reportes
+                    </Button>
+                </div>
             </div>
         </div>
     );

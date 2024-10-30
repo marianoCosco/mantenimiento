@@ -1,28 +1,5 @@
 "use client";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 interface intervencion {
     id: string
     userId: string | null

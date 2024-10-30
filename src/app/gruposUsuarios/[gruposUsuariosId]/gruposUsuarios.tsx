@@ -12,7 +12,7 @@ export default function GruposUsuariosPage(props: { params: { gruposUsuariosId: 
 
     return (
         <div>
-            <h1>{gruposUsuarios?.id}</h1>
+            <h1>id:{gruposUsuarios?.id}</h1>
             <p>idolo crack 5 palabras: crack</p>
         </div>
     )

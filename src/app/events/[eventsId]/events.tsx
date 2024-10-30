@@ -1,26 +1,5 @@
 "use client";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 interface evento {
     id: string;
     EquipoId: string | null;
@@ -37,7 +16,7 @@ export default function EventoPage(props: { params: { evento: evento } }) {
 
     return (
         <div>
-            <h1>equipo:{evento?.EquipoId}</h1>
+            <h1>evento:{evento?.EquipoId}</h1>
             <p>q grande la banda</p>
         </div>
     )

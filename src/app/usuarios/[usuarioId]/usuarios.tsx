@@ -28,7 +28,7 @@ export default function UsuariosPage(props: {params: { usuarioId: usuario }}) {
     return (
         <div>
             
-            <h1>{usuarioId?.id}</h1>
+            <h1>id:{usuarioId?.id}</h1>
             <p>idolo crack 5 palabras: crack</p>
         </div>
     )

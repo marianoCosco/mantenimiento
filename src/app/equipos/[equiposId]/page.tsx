@@ -12,14 +12,13 @@ export default function GrupoPage(props: { params: { equiposId: string } }) {
     if(equipo) {
         return (
             <div>
-                <p>id: {equipo?.id}</p>
                 <GruposPage params={{equipo: equipo}} />
             </div>
         )
     }
     else{
         return (
-            <div> no existe esto</div>
+            <div> no existe equipo</div>
         )
     }
 }

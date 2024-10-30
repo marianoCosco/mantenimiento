@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { api } from "~/trpc/react";
+import { List } from "../_components/ui/list";
+import { Button } from "../_components/ui/button";
+import { Trash2Icon } from "lucide-react";
 
 export default function Page() {
     const { data: ordenesDeTrabajo } = api.ordenesDeTrabajo.list.useQuery();
@@ -49,20 +51,32 @@ export default function Page() {
     }
     return (
         <div>
-            <h1>ordenes De Trabajo</h1>
+            <h1 className="flex justify-center mt-10">ordenes De Trabajo</h1>
             <div>
-                {ordenesDeTrabajo? ordenesDeTrabajo?.map((odt) => (
-                    <div key={odt.id}>
-                        <p>id: {odt.id}</p>
-                        <p>title: {odt.title}</p>
-                        <div className="flex gap-3">
-                            <button onClick={() => editar(odt.id)}>Editar</button>
-                            <button onClick={() => borrar(odt.id)}>borrar</button>
-                            <button onClick={() => window.location.href = `/ordenesDeTrabajo/${odt.id}` }>ver orden de trabajo</button>
+                <List>
+                    {ordenesDeTrabajo? ordenesDeTrabajo?.map((odt) => (
+                        <div className="border border-black p-10" key={odt.id}>
+                            <p>id: {odt.id}</p>
+                            <p>title: {odt.title}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => editar(odt.id)}>
+                                Actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/ordenesDeTrabajo/${odt.id}` }>
+                                    ver orden de trabajo
+                                </Button>
+                                <Button onClick={() => borrar(odt.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )): <h1>no existen imagenes</h1>}
-                <button onClick={crear}>Crear ordenes de trabajo</button>
+                    )): <h1>no existen ordenes de trabajo</h1>}
+                </List>
+                <div className="flex justify-center p-10">
+                    <Button onClick={crear}>
+                        Crear ordenes de trabajo
+                    </Button>
+                </div>
             </div>
         </div>
     );

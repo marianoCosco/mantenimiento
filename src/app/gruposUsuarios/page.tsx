@@ -1,8 +1,9 @@
 "use client"
 
 import { api } from "~/trpc/react"
-import Link from "next/link"
-import { List, ListTile } from "../_components/ui/list";
+import { List } from "../_components/ui/list";
+import { Button } from "../_components/ui/button";
+import { Trash2Icon } from "lucide-react";
 
 export default function Page() {
     const { data: gruposDeUsuarios } = api.gruposUsuarios.list.useQuery();
@@ -36,21 +37,30 @@ export default function Page() {
     }
     return (
         <div>
-            <h1>grupos de usuarios</h1>
+            <h1 className="flex justify-center mt-10">grupos de usuarios </h1>
             <List>
-
-            {gruposDeUsuarios? gruposDeUsuarios?.map((gruposDeUsuario) => (
-                <div key={gruposDeUsuario.id}>
-                    <p>id: {gruposDeUsuario.id}</p>
-                    <p>usuario: {gruposDeUsuario.usuario_id}</p>
-                    <p>grupo: {gruposDeUsuario.equipo_id}</p>
-                    <button onClick={() => updates(gruposDeUsuario.id)}>Update</button>
-                    <button onClick={() => deletes(gruposDeUsuario.id)}>Delete</button>
-            <ListTile title= {"ver grupos de usuario"} href={`/gruposUsuarios/${gruposDeUsuario.id}`} />   
+                {gruposDeUsuarios? gruposDeUsuarios?.map((gruposDeUsuario) => (
+                    <div className="border border-black p-10" key={gruposDeUsuario.id}>
+                        <p>id: {gruposDeUsuario.id}</p>
+                        <p>usuario: {gruposDeUsuario.usuario_id}</p>
+                        <p>grupo: {gruposDeUsuario.equipo_id}</p>
+                        <Button onClick={() => updates(gruposDeUsuario.id)}>
+                        Actualizar
+                        </Button>
+                        <Button onClick={() => window.location.href = `/gruposUsuarios/${gruposDeUsuario.id}`} >
+                            ver reportes
+                        </Button>
+                        <Button onClick={() => deletes(gruposDeUsuario.id)}>
+                            <Trash2Icon/>
+                        </Button>
             </div>
             )): <h1>no existen grupos de usuarios</h1>}
             </List>
-            <button onClick={() => creacion()}>Create</button>
+            <div className="flex justify-center mt-10">
+                <Button onClick={() => creacion()}>
+                    Crear grupo de usuarios
+                </Button>
+            </div>
         </div>
     )
 }

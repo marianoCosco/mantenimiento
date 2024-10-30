@@ -1,6 +1,9 @@
 "use client"
 
 import { api } from "~/trpc/react";
+import { Button } from "../_components/ui/button";
+import { List } from "../_components/ui/list";
+import { Trash2Icon } from "lucide-react";
 export default function Page() {
     const { data: events } = api.events.list.useQuery();
     const { mutateAsync: createEvent } = api.events.create.useMutation();
@@ -49,20 +52,32 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Eventos</h1>
+            <h1 className="flex justify-center mt-10">Eventos</h1>
             <div>
-                {events? events?.map((event) =>(
-                    <div key={event.id}>
-                        <p>id: {event.description}</p>
-                        <div className="flex gap-3">
-                            <button onClick={() => deletes(event.id)}>Delete</button>
-                            <button onClick={() => updates(event.id)}>Update</button>
-                            <button onClick={() => window.location.href = `/events/${event.id}`} >ver evento</button>
+                <List>
+                    {events? events?.map((event) =>(
+                        <div className="border border-black p-10" key={event.id}>
+                            <p>id: {event.description}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => updates(event.id)}>
+                                Actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/events/${event.id}`} >
+                                    ver evento
+                                </Button>
+                                <Button onClick={() => deletes(event.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                        )): "no existen eventos"}
+                    )): "no existen eventos"}
+                </List>
             </div>
-            <button onClick={creacion}>Crear Evento</button>
+            <div className="flex justify-center p-10">
+                <Button onClick={creacion}>
+                    Crear Evento
+                </Button>
+            </div>
         </div>
     )
 

@@ -17,7 +17,6 @@ export default function UsuarioPage(props: {params: { usuarioId: string }}) {
     } 
     return (  
         <div>
-            <h1>id: {usuario?.id}</h1>
             <UsuariosPage params={{usuarioId: usuario}} />
         </div>        
     )

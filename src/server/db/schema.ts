@@ -2,7 +2,6 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations, sql } from "drizzle-orm";
-import { date, timestamp } from "drizzle-orm/mysql-core";
 import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
 import { nanoid } from "nanoid";
 

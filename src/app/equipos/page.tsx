@@ -1,6 +1,9 @@
 "use client"
 
 import { api } from "~/trpc/react"
+import { Button } from "../_components/ui/button"
+import { List } from "../_components/ui/list"
+import { Trash2Icon } from "lucide-react"
 
 export default function Page() {
     const { data: equipos } = api.equipos.list.useQuery()
@@ -40,19 +43,31 @@ export default function Page() {
     }
     return (
         <div>
-            <h1>Equipos</h1>
+            <h1 className="flex justify-center mt-10">Equipos</h1>
             <div>
-                {equipos? equipos?.map((equipo) => (
-                    <div key={equipo.id}>
-                        <p>{equipo.name}</p>
-                        <div className="flex gap-3">
-                            <button onClick={() => editar(equipo.id)}>Editar</button>
-                            <button onClick={() => borrar(equipo.id)}>Borrar</button>
-                            <button onClick={() => window.location.href = `/equipos/${equipo.id}`} > ver equipo</button>
+                <List>
+                    {equipos? equipos?.map((equipo) => (
+                        <div className="border border-black p-10" key={equipo.id}>
+                            <p>equipo:{equipo.name}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => editar(equipo.id)}>
+                                Actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/equipos/${equipo.id}`} >
+                                    ver equipo
+                                </Button>
+                                <Button onClick={() => borrar(equipo.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )): <h1>No hay equipos</h1> }
-                <button onClick={() => creacion()}>Crear</button>
+                    )): <h1>No hay equipos</h1> }
+                </List>
+                <div className="flex justify-center p-10">
+                    <Button onClick={() => creacion()}>
+                        Crear equipo
+                    </Button>
+                </div>
             </div>
         </div>
     )

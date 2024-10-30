@@ -1,6 +1,9 @@
 "use client"
 
 import { api } from "~/trpc/react"
+import { Button } from "../_components/ui/button"
+import { List } from "../_components/ui/list"
+import { Trash2Icon } from "lucide-react"
 
 export default function Page() {
     const { data: intervenciones } = api.intervenciones.list.useQuery()
@@ -39,21 +42,33 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Intervenciones</h1>
+            <h1 className="flex justify-center mt-10">Intervenciones</h1>
             <div>
-                {intervenciones? intervenciones?.map((intervencion) => (
-                    <div key={intervencion.id}>
-                        <p>id: {intervencion.id}</p>
-                        <p>descripcion: {intervencion.descripcion}</p>
-                        <div className="flex gap-3">
-                            <button onClick={() => deletes(intervencion.id)}>Delete</button>
-                            <button onClick={() => updates(intervencion.id)}>Update</button>
-                            <button onClick={() => window.location.href = `/intervenciones/${intervencion.id}`}>ver intervencion</button>
+                <List>
+                    {intervenciones? intervenciones?.map((intervencion) => (
+                        <div className="border border-black p-10" key={intervencion.id}>
+                            <p>id: {intervencion.id}</p>
+                            <p>descripcion: {intervencion.descripcion}</p>
+                            <div className="flex gap-3">
+                                <Button onClick={() => updates(intervencion.id)}>
+                                Actualizar
+                                </Button>
+                                <Button onClick={() => window.location.href = `/intervenciones/${intervencion.id}`}>
+                                    ver intervencion
+                                </Button>
+                                <Button onClick={() => deletes(intervencion.id)}>
+                                    <Trash2Icon/>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )): <h1>no existen intervenciones</h1>}
+                    )): <h1>no existen intervenciones</h1>}
+                </List>
             </div>
-            <button onClick={creacion}>Crear intervenciones</button>
+            <div className="flex justify-center p-10">
+                <Button onClick={creacion}>
+                    Crear intervenciones
+                </Button>
+            </div>
         </div>
     )
 }
