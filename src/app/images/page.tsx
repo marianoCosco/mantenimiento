@@ -59,7 +59,7 @@ export default function Page() {
                     )): <h1>no existen imagenes</h1>}
                 </List>
                 <div className="flex justify-center p-10">
-                    <Button onClick={creacion}>
+                    <Button onClick={creacion} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
                         Crear Imagen
                     </Button>
                 </div>

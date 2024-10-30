@@ -73,7 +73,7 @@ export default function Page() {
                     )): <h1>no existen ordenes de trabajo</h1>}
                 </List>
                 <div className="flex justify-center p-10">
-                    <Button onClick={crear}>
+                    <Button onClick={crear} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
                         Crear ordenes de trabajo
                     </Button>
                 </div>

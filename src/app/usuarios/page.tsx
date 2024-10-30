@@ -1,7 +1,7 @@
 "use client"
 
 import { api } from "~/trpc/react";
-import { List, ListTile } from "../_components/ui/list";
+import { List } from "../_components/ui/list";
 import { Button } from "../_components/ui/button";
 import { Trash2Icon } from "lucide-react";
 
@@ -66,7 +66,7 @@ export default function Page() {
                 
             </div>
             <div className="flex justify-center p-10">
-                <Button onClick={() => creates()}>
+                <Button onClick={() => creates()} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
                     Crear usuario
                 </Button>
             </div>
