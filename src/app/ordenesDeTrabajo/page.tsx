@@ -4,81 +4,56 @@ import { api } from "~/trpc/react";
 import { List } from "../_components/ui/list";
 import { Button } from "../_components/ui/button";
 import { Trash2Icon } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import EditarOrdenTrabajo from "./edit";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Page() {
     const { data: ordenesDeTrabajo } = api.ordenesDeTrabajo.list.useQuery();
-    const { mutateAsync: createOrdenDeTrabajo } = api.ordenesDeTrabajo.create.useMutation();
-    const { mutateAsync: upload } = api.ordenesDeTrabajo.upload.useMutation();
     const { mutateAsync: deleteOrdenDeTrabajo } = api.ordenesDeTrabajo.delete.useMutation();
-    const { data: equipos } = api.equipos.list.useQuery()
-    const { data: users } = api.usuarios.list.useQuery()
-
-
-    async function crear() {
-        if(equipos && users) {
-            await createOrdenDeTrabajo({
-                equipo_id: equipos[0]?.id ?? "",
-                userId: users[0]?.id ?? "",
-                title: "1",
-                descripcion: "1",
-                additional_info: "1",
-                createdAt: new Date(),
-                fecha_programada: new Date(),
-                fecha_finalizacion: new Date(),
-                estado: "en proceso",
-            });
-        }
-    }
     
-    async function editar(id: string) {
-        if(equipos && users) {
-            await upload({
-                id: id,
-                equipo_id: equipos[0]?.id ?? "",
-                userId: users[0]?.id ?? "",
-                title: "2",
-                descripcion: "1",
-                additional_info: "1",
-                createdAt: new Date(),
-                fecha_programada: new Date(),
-                fecha_finalizacion: new Date(),
-                estado: "en proceso",
-            });
-        }
-    }
+    const queryClient = useQueryClient()
+
     async function borrar(id: string) {
         await deleteOrdenDeTrabajo({ id });
+        toast.success("Orden borrada correctamente")
+        queryClient.invalidateQueries();
     }
+
+
     return (
         <div>
-            <h1 className="flex justify-center mt-10">ordenes De Trabajo</h1>
+            <h1 className="flex justify-center mt-10">Órdenes de Trabajo</h1>
+                <EditarOrdenTrabajo id= {""} />
             <div>
                 <List>
-                    {ordenesDeTrabajo? ordenesDeTrabajo?.map((odt) => (
-                        <div className="border border-black p-10" key={odt.id}>
-                            <p>id: {odt.id}</p>
-                            <p>title: {odt.title}</p>
-                            <div className="flex gap-3">
-                                <Button onClick={() => editar(odt.id)}>
-                                Actualizar
-                                </Button>
-                                <Button onClick={() => window.location.href = `/ordenesDeTrabajo/${odt.id}` }>
-                                    ver orden de trabajo
-                                </Button>
-                                <Button onClick={() => borrar(odt.id)}>
-                                    <Trash2Icon/>
-                                </Button>
+                    {ordenesDeTrabajo ? (
+                        ordenesDeTrabajo.map((orden) => (
+                            <div className="border border-black p-10" key={orden.id}>
+                                <p>equipo: {orden.equipo?.name}</p>
+                                <p>Título: {orden.title}</p>
+                                <p>Fecha Programada: {orden.fecha_programada?.toLocaleDateString()}</p>	
+                                <p>Estado: {orden.estado}</p>
+                                <p>usuario: {orden.usuario?.nombre}</p>
+                                <div className="flex gap-4 items-center p-2 bg-gray-100 rounded-lg shadow-sm">
+                                    <EditarOrdenTrabajo id= {orden.id} />
+                                    <Button asChild>
+                                        <Link href={`/ordenesDeTrabajo/${orden.id}`}>
+                                            Ver orden de trabajo
+                                        </Link>
+                                    </Button>
+                                    <Button onClick={() => borrar(orden.id)}>
+                                        <Trash2Icon />
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    )): <h1>no existen ordenes de trabajo</h1>}
+                        ))
+                    ) : (
+                        <h1>No existen órdenes de trabajo</h1>
+                    )}
                 </List>
-                <div className="flex justify-center p-10">
-                    <Button onClick={crear} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
-                        Crear ordenes de trabajo
-                    </Button>
-                </div>
             </div>
         </div>
     );
-
 }

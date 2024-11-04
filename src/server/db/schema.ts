@@ -123,12 +123,12 @@ export const equipoUsuarios = createTable(
 
 // muchas ordenes de trabajo
 export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one }) => ({
-  ordenTrabajo: one(ordenesTrabajo, {
-    fields: [ordenesTrabajo.id], 
-    references: [ordenesTrabajo.id],
+  equipo: one(equipos, {
+    fields: [ordenesTrabajo.equipo_id], 
+    references: [equipos.id],
   }),
   usuario: one(usuarios, {
-    fields: [ordenesTrabajo.id],
+    fields: [ordenesTrabajo.userId],
     references: [usuarios.id],
   }),
 }));

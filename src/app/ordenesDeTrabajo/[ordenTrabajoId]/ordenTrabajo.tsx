@@ -18,9 +18,13 @@ export default function OrdenTrabajoIdPage(props: { params: { ordenTrabajoId: or
     const ordenTrabajoId  = props.params.ordenTrabajoId;
 
     return (
-        <div>
-            <h1>id:{ordenTrabajoId?.id}</h1>
-            <p>chavales chavalines</p>
+        <div className="mt-4 border p-4">
+            <p>Título: {ordenTrabajoId.title}</p>
+            <p>Descripción: {ordenTrabajoId.descripcion}</p>
+            <p>Equipo Asignado: {ordenTrabajoId.equipo_id}</p>
+            <p>Fecha Programada: {ordenTrabajoId.fecha_programada?.toLocaleDateString()}</p>
+            <p>Fecha de Finalización: {ordenTrabajoId.fecha_finalizacion?.toLocaleDateString()}</p>
+            <p>Estado: {ordenTrabajoId.estado}</p>
         </div>
     )
 

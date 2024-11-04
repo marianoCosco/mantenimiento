@@ -16,8 +16,10 @@ export default function GruposPage(props: { params: { equipo: equipo } }) {
 
     return (
         <div>
-            <h1>{equipo?.name}</h1>
-            <p>idolo crack 5 palabras: crack</p>
+            <h1>equipo:{equipo?.name}</h1>
+            <h1>descripcion:{equipo?.description}</h1>
+            <h1>state:{equipo?.state}</h1>
+            <h1>qr_code:{equipo?.qr_code}</h1>
         </div>
     )
 

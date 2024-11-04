@@ -3,10 +3,12 @@
 import { api } from "~/trpc/react"
 import { Button } from "../_components/ui/button"
 import { List } from "../_components/ui/list"
+
 import { Trash2Icon } from "lucide-react"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../_components/ui/dialog"
 import { Input } from "../_components/ui/input"
+import Link from "next/link"
 export default function Page() {
     const { data: equipos } = api.equipos.list.useQuery()
     const { mutateAsync: crearEquipo } = api.equipos.create.useMutation()
@@ -75,7 +77,7 @@ export default function Page() {
         resetForm()
     }
     async function borrar(id: string) {
-        await deleteEquipo({ id })
+        await deleteEquipo({id})
     }
     function resetForm() {
         setName("")
@@ -147,9 +149,13 @@ export default function Page() {
                                 <div className="border border-black p-10" key={equipo.id}>
                                     <p>Equipo: {equipo.name}</p>
                                     <div className="flex gap-3">
-                                        <Button onClick={() => openEditDialog(equipo)}>Actualizar</Button>
-                                        <Button onClick={() => window.location.href = `/equipos/${equipo.id}`}>
-                                            Ver equipo
+                                        <Button onClick={() => openEditDialog(equipo)}>
+                                            Actualizar
+                                        </Button>
+                                        <Button>
+                                            <Link href={`/equipos/${equipo.id}`}>
+                                                Ver equipo
+                                            </Link>
                                         </Button>
                                         <Button onClick={() => borrar(equipo.id)}>
                                             <Trash2Icon />

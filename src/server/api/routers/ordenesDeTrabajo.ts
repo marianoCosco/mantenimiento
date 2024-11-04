@@ -8,7 +8,7 @@ create FUNCIONA
 list FUNCIONA
 get PROBAR
 getByTeam PROBAR
-upload FUNCIONA
+update FUNCIONA
 delete FUNCIONA
 */
 export const ordenesDeTrabajoRouter = createTRPCRouter({
@@ -40,7 +40,12 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         //list
     list: publicProcedure
     .query(async () => {
-        const respuesta = await db.query.ordenesTrabajo.findMany();
+        const respuesta = await db.query.ordenesTrabajo.findMany({
+            with: {
+                equipo: true,
+                usuario: true
+            }
+        });
         
         return respuesta;
     }),
@@ -53,7 +58,10 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
         const respuesta = await db.query.ordenesTrabajo.findFirst({
-            where: eq(ordenesTrabajo.id, input.id)
+            where: eq(ordenesTrabajo.id, input.id),
+            with: {
+                equipo: true,
+                usuario: true}
         })
         return respuesta
     }),
@@ -70,8 +78,8 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         })
         return respuesta
     }),
-        //upload FUNCIONA
-    upload: publicProcedure
+        //update FUNCIONA
+    update: publicProcedure
     .input(
         z.object({
             id: z.string(),
@@ -122,7 +130,7 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         if (!deleteOrden) {
             throw new Error("Error al borrar orden");
         }
-        return { success: true, message: "orden eliminada correctamente" };
+        return deleteOrden;
     }),
     
     
