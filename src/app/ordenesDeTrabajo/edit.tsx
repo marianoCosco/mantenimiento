@@ -1,13 +1,10 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import { List } from "../_components/ui/list";
 import { Button } from "../_components/ui/button";
-import { Trash2Icon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../_components/ui/dialog";
 import { Input } from "../_components/ui/input";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Calendar } from "~/components/ui/calendar";
 import { useQueryClient } from "@tanstack/react-query";
@@ -27,9 +24,8 @@ export default function EditarOrdenTrabajo(params: {id:string}) {
     const [descripcion, setDescripcion] = useState(orden?.descripcion ?? "");
     const [fechaProgramada, setFechaProgramada] = useState<Date | undefined>(orden?.fecha_programada ?? new Date());
     const [fechaFinalizada, setFechaFinalizada] = useState<Date | undefined>(orden?.fecha_finalizacion ?? new Date()); 
-    const [equipoId, setEquipoId] = useState("");
-    const [userId, setUserId] = useState("");
-
+    const [equipoId, setEquipoId] = useState( orden?.equipo?.id ?? "");
+    const [userId, setUserId] = useState( orden?.usuario?.id ?? "");
 
 useEffect(() => {
     if (orden) {
@@ -38,8 +34,8 @@ useEffect(() => {
         setDescripcion(orden.descripcion ?? "");
         setFechaProgramada(orden.fecha_programada ?? new Date());
         setFechaFinalizada(orden.fecha_finalizacion ?? new Date());
-        setEquipoId(orden.equipo_id ?? "");
-        setUserId(orden.userId ?? "");
+        setEquipoId(orden.equipo?.id ?? "");
+        setUserId(orden.usuario?.id ?? "");
     }
 }, [orden]);
 
@@ -76,7 +72,7 @@ async function handleSave() {
         }
         setOpenDialog(false);
         resetForm();
-        queryClient.invalidateQueries();
+        await queryClient.invalidateQueries();
     } catch (e) {
         console.error("Error al guardar la orden de trabajo:", e);
         toast.error("Error al crear la orden de trabajo");
@@ -142,14 +138,14 @@ return (
                                 </div>
                                 <label>Equipo</label>
                                 <select value={equipoId} onChange={(e) => setEquipoId(e.target.value)} required>
-                                <option value="">Selecciona un equipo</option>
+                                <option value={equipoId}>Selecciona un equipo</option>
                                     {equipos?.map((user) => (
                                 <option key={user.id} value={user.id}>{user.name}</option>
                                     ))}
                                 </select>
                                 <label>Usuario</label>
                                 <select value={userId} onChange={(e) => setUserId(e.target.value)} required>
-                                <option value="">Selecciona un usuario</option>
+                                <option value={userId}>Selecciona un usuario</option>
                                     {users?.map((user) => (
                                 <option key={user.id} value={user.id}>{user.nombre}</option>
                                     ))}

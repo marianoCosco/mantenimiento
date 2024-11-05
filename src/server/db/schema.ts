@@ -143,3 +143,14 @@ export const intervencionesUsuariosRelations = relations(intervenciones, ({ one 
     references: [usuarios.id],
   }),
 }));
+
+export const reporteUsuariosRelations = relations(reportes, ({ one }) => ({
+  equipo: one(equipos, {
+    fields: [reportes.id], 
+    references: [equipos.id],
+  }),
+  usuario: one(usuarios, {
+    fields: [reportes.id],
+    references: [usuarios.id],
+  }),
+}));

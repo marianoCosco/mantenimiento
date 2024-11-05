@@ -16,9 +16,12 @@ export default function ReporteIdPage(props: { params: { reportesId: reporte } }
     const reportesId  = props.params.reportesId;
 
     return (
-        <div>
-            <h1>id:{reportesId?.id}</h1>
-            <p>borja hacelo real por favor</p>
+        <div className="mt-4 border p-4">
+            <p>descripcion: {reportesId.descripcion}</p>
+            <p>nombre del equipo: {reportesId.equipo_id}</p>
+            <p>fecha de creacion: {reportesId.createdAt?.toDateString()}</p>
+            <p>tipo de reporte: {reportesId.tipo_reporte}</p>
+            <p>periodo: {reportesId.periodo}</p>
         </div>
     )
 

@@ -18,7 +18,7 @@ export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: stri
                 userId: ordenDeTrabajo.userId ?? "", // Asigna un valor por defecto si es null
                 title: ordenDeTrabajo.title ?? "", // Asigna un valor por defecto si es null
                 descripcion: ordenDeTrabajo.descripcion ?? "", // Asigna un valor por defecto si es null
-                additional_info: ordenDeTrabajo.additional_info || "", // Asegúrate de que no sea undefined
+                additional_info: ordenDeTrabajo.additional_info ?? "", // Asegúrate de que no sea undefined
                 fecha_programada: ordenDeTrabajo.fecha_programada ?? new Date(), // Asigna una fecha actual si es null
                 fecha_finalizacion: ordenDeTrabajo.fecha_finalizacion ?? new Date() , // Puede ser null si es opcional
                 estado: nuevoEstado,
@@ -34,14 +34,18 @@ export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: stri
                 <h2 className="text-2xl font-semibold">Detalle de Orden de Trabajo</h2>
                     <OrdenTrabajoIdPage params={{ordenTrabajoId: ordenDeTrabajo}} />
                 <div className="mt-4">
-                
-                <Button onClick={() => handleEstadoChange("en proceso")}>Comenzar OT</Button>
-                
-                <Button onClick={() => handleEstadoChange("cancelada")}>Cancelar OT</Button>
-                {ordenDeTrabajo.estado === "en proceso" && (
-                    <Button onClick={() => handleEstadoChange("completada")}>Aprobar OT</Button>
-                )}
-            </div>
+                    <Button onClick={() => handleEstadoChange("en proceso")}>
+                        Comenzar OT
+                    </Button>
+                    <Button onClick={() => handleEstadoChange("cancelada")}>
+                        Cancelar OT
+                    </Button>
+                    {ordenDeTrabajo.estado === "en proceso" && (
+                        <Button onClick={() => handleEstadoChange("completada")}>
+                            Aprobar OT
+                        </Button>
+                    )}
                 </div>
+            </div>
         )
 }

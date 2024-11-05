@@ -18,7 +18,7 @@ export const reportesRouter = createTRPCRouter({
     .input(
         z.object({
             equipo_id: z.string(),
-            user_id: z.string(),
+            userId: z.string(),
             tipo_reporte: z.enum(["intervencion realizada","estado del equipo"]),
             descripcion: z.string(),
             createdAt: z.date(),
@@ -37,8 +37,13 @@ export const reportesRouter = createTRPCRouter({
     }),
         //list FUNCIONA
     list: publicProcedure
-    .query(async () => {
-        const reportes = await db.query.reportes.findMany()
+    .query(async ({ctx}) => {
+        const reportes = await ctx.db.query.reportes.findMany({
+            with: {
+                equipo: true,
+                usuario: true
+            }
+        })
 
         return reportes
     }),
@@ -49,12 +54,16 @@ export const reportesRouter = createTRPCRouter({
             id: z.string(),
         })
     )
-    .query(async({input}) => {
-        const reporte = await db.query.reportes.findFirst({
-            where:eq(reportes?.id, input.id),
-            with: { equipos: true, usuarios: true },
+    .query(async({input, ctx}) => {
+        const reporte = await ctx.db.query.reportes.findFirst({
+            where:eq(reportes.id, input.id),
+            with: { 
+                equipo: true,
+                usuario: true },
         }) 
-        return reporte
+        if (reporte) {
+            return reporte;
+        } 
     }),
         //getByTeam PROBAR
     getByTeam: publicProcedure
@@ -74,9 +83,9 @@ export const reportesRouter = createTRPCRouter({
     .input(
         z.object({
             id: z.string(),
-            equipoId: z.string(),
+            equipo_id: z.string(),
             userId: z.string(),
-            tipoReporte: z.enum(["intervencion realizada","estado del equipo"]),
+            tipo_reporte: z.enum(["intervencion realizada","estado del equipo"]),
             descripcion: z.string(),
             createdAt: z.date(),
             periodo: z.enum(["semanal","mensual","anual"]),
@@ -87,9 +96,9 @@ export const reportesRouter = createTRPCRouter({
         .update(reportes)
         .set({
             id: input.id,
-            equipo_id: input.equipoId,
+            equipo_id: input.equipo_id,
             userId: input.userId,
-            tipo_reporte: input.tipoReporte,
+            tipo_reporte: input.tipo_reporte,
             descripcion: input.descripcion,
             createdAt: input.createdAt,
             periodo: input.periodo,

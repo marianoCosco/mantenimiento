@@ -18,7 +18,7 @@ export default function Page() {
     async function borrar(id: string) {
         await deleteOrdenDeTrabajo({ id });
         toast.success("Orden borrada correctamente")
-        queryClient.invalidateQueries();
+        await queryClient.invalidateQueries();
     }
 
 

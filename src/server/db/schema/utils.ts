@@ -1,5 +1,4 @@
-import { pgTableCreator, timestamp, varchar } from "drizzle-orm/pg-core";
-import { createId } from "~/lib/utils";
+import { pgTableCreator, timestamp } from "drizzle-orm/pg-core";
 
 export const pgTable = pgTableCreator((name) => `mantenimiento_${name}`);
 
@@ -8,7 +7,7 @@ export const createdAt = timestamp("created_at", { mode: "date" })
   .defaultNow();
 export const updatedAt = timestamp("updated_at", { mode: "date" });
 
-export const columnId = varchar("id", { length: 255 })
-  .notNull()
-  .primaryKey()
-  .$defaultFn(() => createId());
+// export const columnId = varchar("id", { length: 255 })
+//   .notNull()
+//   .primaryKey()
+//   .$defaultFn(() => createId());

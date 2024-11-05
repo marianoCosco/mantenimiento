@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { BotonAtras } from "./_components/post";
 import Header from "./_components/header";
 import Sidenav from "./_components/sidenav";
 
