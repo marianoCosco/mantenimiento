@@ -4,18 +4,17 @@ import {api } from "~/trpc/react"
 import { Button } from "../../../_components/ui/button"
 import { List } from "../../../_components/ui/list"
 import { Trash2Icon } from "lucide-react"
-import IntervencionIdPage from "./intervenciones"
+import EditarIntervenciones from "./edit"
 
-export default function IntervencionPage(props: { params: { intervencionesId: string } }) {
-
-    const intervencionesId  =props.params.intervencionesId;
+export default function IntervencionPage(props: { params: { reportesId: string } }) {
+    const reportesId  =props.params.reportesId;
+    const {data: reporte} = api.reportes.get.useQuery({id: reportesId});
     const { data: intervenciones } = api.intervenciones.list.useQuery()
     const { mutateAsync: createIntervencion } = api.intervenciones.create.useMutation()
     const { mutateAsync: deleteIntervencion } = api.intervenciones.delete.useMutation()
     const { mutateAsync: updateIntervencion } = api.intervenciones.update.useMutation()
     const { data:users } = api.usuarios.list.useQuery()
-    const {data: intervencion} = api.intervenciones.get.useQuery({id: intervencionesId});
-    if(intervencion) {
+    if(reporte) {
         async function creacion() {
             if(users) {
                 await createIntervencion({
@@ -47,8 +46,9 @@ export default function IntervencionPage(props: { params: { intervencionesId: st
     
         return (    
             <div>
-                {intervencionesId}
-                <h1 className="flex justify-center mt-10">Intervenciones</h1>
+                <h1 className="flex justify-center mt-10">Órdenes de Trabajo</h1>
+                <EditarIntervenciones id= {""} />
+            <div>
             <div>
                 <List>
                     {intervenciones? intervenciones?.map((intervencion) => (
@@ -75,13 +75,13 @@ export default function IntervencionPage(props: { params: { intervencionesId: st
                     Crear intervenciones
                 </Button>
             </div>
-                <IntervencionIdPage params={{intervencionesId: intervencion}} />
+            </div>
             </div>
         )
     }
     else{
         return (
-            <div> no existe esta intervencion</div>
+            <div> no existe estaaaaaa intervencion</div>
         )
     }
 }

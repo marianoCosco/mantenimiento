@@ -8,6 +8,11 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Input } from "../_components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue } from "../_components/ui/select";
 
 interface ReportesProps {
     reporte?: RouterOutputs["reportes"]["get"] | null;
@@ -120,20 +125,28 @@ export default function EditarReporte({ reporte }: ReportesProps) {
                                 </select>
                             </div>
                         </div>
-                        <label>Selecciona un equipo</label>
-                        <select value={equipoId} onChange={(e) => setEquipoId(e.target.value)} required>
-                            <option value="">Equipo</option>
-                            {equipos?.map((equipo) => (
-                                <option key={equipo.id} value={equipo.id}>{equipo.name}</option>
-                            ))}
-                        </select>
-                        <label>Usuario que hizo el reporte</label>
-                        <select value={userId} onChange={(e) => setUserId(e.target.value)} required>
-                            <option value="">Usuario</option>
-                            {users?.map((user) => (
-                                <option key={user.id} value={user.id}>{user.nombre}</option>
-                            ))}
-                        </select>
+                        <label>Equipo</label>
+                                <Select value={equipoId} onValueChange={setEquipoId}>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="selecione equipo..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {equipos?.map((equipo)=>
+                                            <SelectItem key={equipo.id} value={equipo.id}>{equipo.name}</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                    </Select>
+                                <label>Usuario</label>
+                                <Select value={userId} onValueChange={setUserId}>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="selecione usuario..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {users?.map((user)=>
+                                            <SelectItem key={user.id} value={user.id}>{user.nombre}</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                    </Select>
                     </div>
                     <DialogFooter className="flex justify-end gap-2">
                         <Button onClick={handleSave} className="bg-green-600 text-white rounded-lg px-4 py-2 hover:bg-green-700">

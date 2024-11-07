@@ -43,6 +43,10 @@ export const intervencionesRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const intervencion = await ctx.db.query.intervenciones.findFirst({
         where: eq(intervenciones.id, input.id),
+        with: {
+          usuario: true,
+          ordenesTrabajo: true,
+        }
       });
 
       if (!intervencion) {
@@ -53,7 +57,12 @@ export const intervencionesRouter = createTRPCRouter({
     }),
     //  list FUNCIONA
   list: publicProcedure.query(async ({ ctx }) => {
-    const intervencion = await ctx.db.query.intervenciones.findMany();
+    const intervencion = await ctx.db.query.intervenciones.findMany({
+      with: {
+        usuario: true,
+        ordenesTrabajo: true,
+      }
+    });
     return intervencion;
   }),
     // update FUNCIONA

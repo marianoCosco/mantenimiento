@@ -8,6 +8,11 @@ import { Input } from "../_components/ui/input";
 import { toast } from "sonner";
 import { Calendar } from "~/components/ui/calendar";
 import { useQueryClient } from "@tanstack/react-query";
+import { Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue, } from "../_components/ui/select";
 
 export default function EditarOrdenTrabajo(params: {id:string}) {
     
@@ -137,19 +142,27 @@ return (
                                     </div>
                                 </div>
                                 <label>Equipo</label>
-                                <select value={equipoId} onChange={(e) => setEquipoId(e.target.value)} required>
-                                <option value={equipoId}>Selecciona un equipo</option>
-                                    {equipos?.map((user) => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
-                                    ))}
-                                </select>
+                                <Select value={equipoId} onValueChange={setEquipoId}>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="selecione equipo..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {equipos?.map((equipo)=>
+                                            <SelectItem key={equipo.id} value={equipo.id}>{equipo.name}</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                    </Select>
                                 <label>Usuario</label>
-                                <select value={userId} onChange={(e) => setUserId(e.target.value)} required>
-                                <option value={userId}>Selecciona un usuario</option>
-                                    {users?.map((user) => (
-                                <option key={user.id} value={user.id}>{user.nombre}</option>
-                                    ))}
-                                </select>
+                                <Select value={userId} onValueChange={setUserId}>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="selecione usuario..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {users?.map((user)=>
+                                            <SelectItem key={user.id} value={user.id}>{user.nombre}</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                    </Select>
                             </div>
                             <DialogFooter className="flex justify-end gap-2">
                                 <Button

@@ -1,85 +1,52 @@
-"use client"
+"use client";
 
 import { api } from "~/trpc/react";
 import { Button } from "../_components/ui/button";
 import { List } from "../_components/ui/list";
 import { Trash2Icon } from "lucide-react";
+import EditarEvento from "./edit";
+import Link from "next/link";
+
 export default function Page() {
     const { data: events } = api.events.list.useQuery();
-    const { mutateAsync: createEvent } = api.events.create.useMutation();
-    const { data:equipos } = api.equipos.list.useQuery();
-    const { data:reportes } = api.reportes.list.useQuery();
-    const {mutateAsync: deleteEvent } = api.events.delete.useMutation();
-    const {mutateAsync: updateEvent } = api.events.update.useMutation();
-    const { data: ordenTrabajo } = api.ordenesDeTrabajo.list.useQuery();
-    const { data:intervenciones } = api.intervenciones.list.useQuery(); // {id:int}
-    // tuve problemas para importar el get
-    async function creacion() {
-        if(equipos && reportes && intervenciones && ordenTrabajo) {
-            await createEvent({
-                EquipoId: equipos[0]?.id ?? "",
-                ReporteId: reportes[0]?.id ?? "",
-                OTId: ordenTrabajo[0]?.id ?? "", 
-                intervencionId: intervenciones[0]?.id ?? "",
-                type: "1",
-                description: "1",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            })
-            console.log("hola")
-        }
-    }
+    const { mutateAsync: deleteEvent } = api.events.delete.useMutation();
 
     async function deletes(id: string) {
-        await deleteEvent({id: id})
-    }
-
-    async function updates(id: string) {
-        if(equipos && reportes ) {
-            await updateEvent({
-                id: id,
-                EquipoId: equipos[0]?.id ?? "",
-                ReporteId: reportes[0]?.id ?? "",
-                OTId: "1", 
-                intervencionId: equipos[0]?.id ?? "",
-                type: "1",
-                description: "2",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            })
-        }
+        await deleteEvent({ id });
     }
 
     return (
         <div>
             <h1 className="flex justify-center mt-10">Eventos</h1>
+            <div className="flex justify-center p-10">
+                <EditarEvento evento={null} />
+            </div>
             <div>
                 <List>
-                    {events? events?.map((event) =>(
+                    {events ? events.map((event) => (
                         <div className="border border-black p-10" key={event.id}>
-                            <p>id: {event.description}</p>
+                            <p>{event.type} - {event.description}</p>
+                            <p>Usuario: {event.equipos?.name}</p>
+                            <p>reporteId: {event.ReporteId ?? "---"}</p>
+                            <p>OTId: {event.OTId}</p>
+                            <p>intervencionId: {event.intervencionId}</p>
+                            <p>tipo: {event.type}</p>
+                            <p>Fecha: {event.ReporteId}</p>
                             <div className="flex gap-3">
-                                <Button onClick={() => updates(event.id)}>
-                                Actualizar
-                                </Button>
-                                <Button onClick={() => window.location.href = `/events/${event.id}`} >
-                                    ver evento
+                                <EditarEvento evento={event} />
+                                <Button asChild>
+                                    <Link href={`/events/${event.id}`}>
+                                        Ver evento
+                                    </Link>
                                 </Button>
                                 <Button onClick={() => deletes(event.id)}>
-                                    <Trash2Icon/>
+                                    <Trash2Icon />
                                 </Button>
                             </div>
                         </div>
-                    )): "no existen eventos"}
+                    )) : "No existen eventos"}
                 </List>
             </div>
-            <div className="flex justify-center p-10">
-                <Button onClick={creacion} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
-                    Crear Evento
-                </Button>
-            </div>
         </div>
-    )
-
-
+    );
 }

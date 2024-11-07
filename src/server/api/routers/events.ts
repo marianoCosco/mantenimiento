@@ -39,7 +39,14 @@ create: publicProcedure
     // list FUNCIONA
 list: publicProcedure
 .query(async ({ ctx }) => {
-    const events = await ctx.db.query.events.findMany()
+    const events = await ctx.db.query.events.findMany({
+        with: {
+            equipos: true,
+            reportes: true,
+            ordenesTrabajo:true,
+            intervenciones:true,
+        }
+    })
     return events
 }),
     //get PROBAR
@@ -52,6 +59,12 @@ get: publicProcedure
 .query(async ({ ctx, input }) => {
     const event = await ctx.db.query.events.findFirst({
         where: eq(events.id, input.id),
+        with: {
+            equipos: true,
+            reportes: true,
+            ordenesTrabajo:true,
+            intervenciones:true,
+        }
     })
     return event
 }),

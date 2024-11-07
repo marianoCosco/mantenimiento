@@ -121,6 +121,25 @@ export const equipoUsuarios = createTable(
   }
 );
 
+export const eventosUsuariosRelations = relations(events, ({one})=> ({
+  equipos: one(equipos,{
+    fields: [events.EquipoId],
+    references: [equipos.id],
+  }),
+  reportes: one(reportes,{
+    fields: [events.ReporteId],
+    references: [reportes.id]
+  }),
+  ordenesTrabajo: one(ordenesTrabajo,{
+    fields: [events.ReporteId],
+    references: [ordenesTrabajo.id]
+  }),
+  intervenciones: one(intervenciones,{
+    fields: [events.ReporteId],
+    references: [intervenciones.id]
+  }),
+}))
+
 // muchas ordenes de trabajo
 export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one }) => ({
   equipo: one(equipos, {
@@ -134,9 +153,9 @@ export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one })
 }));
 
 export const intervencionesUsuariosRelations = relations(intervenciones, ({ one }) => ({
-  intervencion: one(intervenciones, {
+  ordenesTrabajo: one(ordenesTrabajo, {
     fields: [intervenciones.id], 
-    references: [intervenciones.id],
+    references: [ordenesTrabajo.id],
   }),
   usuario: one(usuarios, {
     fields: [intervenciones.id],
@@ -146,11 +165,25 @@ export const intervencionesUsuariosRelations = relations(intervenciones, ({ one 
 
 export const reporteUsuariosRelations = relations(reportes, ({ one }) => ({
   equipo: one(equipos, {
-    fields: [reportes.id], 
+    fields: [reportes.equipo_id], 
     references: [equipos.id],
   }),
   usuario: one(usuarios, {
-    fields: [reportes.id],
+    fields: [reportes.userId],
     references: [usuarios.id],
   }),
 }));
+
+export const equiposRelations = relations(equipos, ({many}) =>({
+  ordenesTrabajo: many(ordenesTrabajo),
+  reportes: many(reportes),
+  images: many(images),
+  equipoUsuarios:many(equipoUsuarios)
+}))
+
+export const usuariosRelations = relations(usuarios, ({many}) =>({
+  ordenesTrabajo: many(ordenesTrabajo),
+  reportes: many(reportes),
+  images: many(images),
+  equipoUsuarios:many(equipoUsuarios)
+}))

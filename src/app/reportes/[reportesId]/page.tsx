@@ -3,8 +3,8 @@
 import {api } from "~/trpc/react"
 
 import ReporteIdPage from "./reportes"
-import { Link } from "lucide-react";
-import { Button } from "react-day-picker";
+import { Button } from "~/app/_components/ui/button";
+import Link from "next/link";
 
 export default function ReportePage(props: { params: { reportesId: string } }) {
 
@@ -15,11 +15,13 @@ export default function ReportePage(props: { params: { reportesId: string } }) {
             <div>
                 <p>reporte:</p>
                 <ReporteIdPage params={{reportesId: reporte}} />
-                <Button >
-                    <Link href={`/reportes/${ reportesId }/intervenciones}`}>
-                        ver intervenciones
-                    </Link>
-                </Button>
+                <div className="mt-4">
+                    <Button >
+                        <Link href={`/reportes/${reportesId}/intervenciones`}>
+                            crear una intervenciones
+                        </Link>
+                    </Button>
+                </div>
             </div>
         )
     }
