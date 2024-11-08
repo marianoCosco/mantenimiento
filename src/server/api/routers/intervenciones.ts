@@ -43,6 +43,10 @@ export const intervencionesRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const intervencion = await ctx.db.query.intervenciones.findFirst({
         where: eq(intervenciones.id, input.id),
+        with: {
+          usuario: true,
+          ordenesTrabajo: true,
+        }
       });
 
       if (!intervencion) {

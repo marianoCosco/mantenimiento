@@ -6,9 +6,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../_components/ui/dialog";
 import { Input } from "../../../_components/ui/input";
 import { toast } from "sonner";
-import { Calendar } from "~/components/ui/calendar";
 import { useQueryClient } from "@tanstack/react-query";
-import { intervenciones } from "~/server/db/schema";
 interface IntervencionProps {
     intervenciones?: RouterOutputs["intervenciones"]["get"] | null;
 }
@@ -29,6 +27,11 @@ export default function EditarIntervenciones({intervenciones}:IntervencionProps)
 
 useEffect(() => {
     if (intervenciones) {
+        setCreatedAt(intervenciones.createdAt ?? new Date);
+        setUserId(intervenciones.userId ?? "")
+        setTitle(intervenciones.title ?? "")
+        setDescripcion(intervenciones.descripcion ?? "")
+        setOrdenTrabajo(intervenciones.OTid ?? "")
     }
 }, [intervenciones]);
 
@@ -82,7 +85,7 @@ return (
                         <DialogContent className="bg-white shadow-lg rounded-lg p-6 sm:max-w-[800px] max-h-[80vh] overflow-y-auto">
                             <DialogHeader className="border-b border-gray-200 pb-4 mb-4">
                                 <DialogTitle className="text-xl font-semibold text-gray-800">
-                                    {intervenciones ? "Editar Orden de Trabajo" + " " + intervenciones.title : "Crear Orden de Trabajo"}
+                                    {intervenciones ? "Editar intervencion" + " " + intervenciones.title : "Crear intervencion"}
                                 </DialogTitle>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">

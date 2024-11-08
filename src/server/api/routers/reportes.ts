@@ -61,9 +61,10 @@ export const reportesRouter = createTRPCRouter({
                 equipo: true,
                 usuario: true },
         }) 
-        if (reporte) {
-            return reporte;
+        if (!reporte) {
+            throw new Error("reporte no encontrado")
         } 
+        return reporte;
     }),
         //getByTeam PROBAR
     getByTeam: publicProcedure

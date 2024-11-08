@@ -8,9 +8,6 @@ import Link from "next/link"
 export default function Page() {
     const { data: intervenciones } = api.intervenciones.list.useQuery()
     
-
-
-
     return (
         <div>
             <h1 className="flex justify-center mt-10">Intervenciones</h1>
@@ -19,12 +16,13 @@ export default function Page() {
                     {intervenciones? intervenciones?.map((intervencion) => (
                         <div className="border border-black p-10" key={intervencion.id}>
                             <p>descripcion: {intervencion.descripcion}</p>
-                            <p>orden de trabajo:{intervencion.ordenesTrabajo?.title ?? "-"}</p>
-                            <p>Usuario que intervino:{intervencion.usuario?.nombre ?? "a"}</p>
+                            <p>orden de trabajo:{intervencion.ordenesTrabajo?.title}</p>
+                            <p>Usuario que intervino:{intervencion.usuario?.nombre}</p>
                             <p>fecha de creacion:{intervencion.createdAt?.toLocaleDateString() ?? "aS"}</p>
-                            <div className="flex gap-3">
+                            <p>estado de intervencion: {intervencion.ordenesTrabajo?.estado}</p>
+                            <div className="flex gap-4 items-center p-2 bg-gray-100 rounded-lg shadow-sm">
                             <Button asChild>
-                                <Link href={`/intervencionesId/${intervencion.id}`}>
+                                <Link href={`/intervenciones/${intervencion.id}`}>
                                     Ver intervencion
                                 </Link>
                             </Button>

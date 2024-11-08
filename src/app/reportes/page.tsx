@@ -19,7 +19,6 @@ export default function Page() {
         await deleteReporte({id: id});
         await queryClient.invalidateQueries();
     }
-    console.log({reporte:reportes})
     return (
         <div>
             <h1 className="flex justify-center mt-10">Reportes</h1>
