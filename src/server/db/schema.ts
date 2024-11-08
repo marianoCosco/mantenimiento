@@ -77,7 +77,7 @@ export const intervenciones = createTable(
   {
     id:  text("id").primaryKey().notNull().$defaultFn(()=> nanoid()),
     userId: text("user_id").references(() => usuarios.id),
-    OTid: text("ot_id"),
+    OTid: text("ot_id").references(() => ordenesTrabajo.id),
     title: text("title"),
     descripcion: text("descripcion"),
     createdAt: int("created_at", { mode: "timestamp" }),
@@ -154,11 +154,11 @@ export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one })
 
 export const intervencionesUsuariosRelations = relations(intervenciones, ({ one }) => ({
   ordenesTrabajo: one(ordenesTrabajo, {
-    fields: [intervenciones.id], 
+    fields: [intervenciones.OTid], 
     references: [ordenesTrabajo.id],
   }),
   usuario: one(usuarios, {
-    fields: [intervenciones.id],
+    fields: [intervenciones.userId],
     references: [usuarios.id],
   }),
 }));

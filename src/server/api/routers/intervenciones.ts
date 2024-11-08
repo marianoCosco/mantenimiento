@@ -14,11 +14,11 @@ export const intervencionesRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        user_id: z.string(),
-        ot_id: z.string(),
+        userId: z.string(),
+        OTid: z.string(),
         title: z.string(),
         descripcion: z.string(),
-        created_At: z.date(),
+        createdAt: z.date(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,10 +43,6 @@ export const intervencionesRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const intervencion = await ctx.db.query.intervenciones.findFirst({
         where: eq(intervenciones.id, input.id),
-        with: {
-          usuario: true,
-          ordenesTrabajo: true,
-        }
       });
 
       if (!intervencion) {
@@ -70,11 +66,11 @@ export const intervencionesRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        user_id: z.string(),
-        ot_id: z.string(),
+        userId: z.string(),
+        OTid: z.string(),
         title: z.string(),
         descripcion: z.string(),
-        created_At: z.date(),
+        createdAt: z.date(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -82,11 +78,11 @@ export const intervencionesRouter = createTRPCRouter({
         .update(intervenciones)
         .set({
           id: input.id,
-          userId: input.user_id,
-          OTid: input.ot_id,
+          userId: input.userId,
+          OTid: input.OTid,
           title: input.title,   
           descripcion: input.descripcion,
-          createdAt: input.created_At,
+          createdAt: input.createdAt,
         })
         .where(eq(intervenciones.id, input.id))
         .returning();

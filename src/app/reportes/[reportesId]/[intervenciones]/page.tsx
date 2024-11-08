@@ -10,44 +10,15 @@ export default function IntervencionPage(props: { params: { reportesId: string }
     const reportesId  =props.params.reportesId;
     const {data: reporte} = api.reportes.get.useQuery({id: reportesId});
     const { data: intervenciones } = api.intervenciones.list.useQuery()
-    const { mutateAsync: createIntervencion } = api.intervenciones.create.useMutation()
     const { mutateAsync: deleteIntervencion } = api.intervenciones.delete.useMutation()
-    const { mutateAsync: updateIntervencion } = api.intervenciones.update.useMutation()
-    const { data:users } = api.usuarios.list.useQuery()
     if(reporte) {
-        async function creacion() {
-            if(users) {
-                await createIntervencion({
-                    user_id: users[0]?.id ?? "",
-                    ot_id: "1",
-                    title: "1",
-                    descripcion: "1",
-                    created_At: new Date(),
-                })
-            }
-        }
-    
         async function deletes(id: string) {
             await deleteIntervencion({ id })
         }
-    
-        async function updates(id: string) {
-            if(users){
-                await updateIntervencion({
-                    id,
-                    user_id:  users[0]?.id ?? "",
-                    ot_id: "1",
-                    title: "1",
-                    descripcion: "2",
-                    created_At: new Date(),
-                })
-            }
-        }
-    
         return (    
             <div>
-                <h1 className="flex justify-center mt-10">Órdenes de Trabajo</h1>
-                <EditarIntervenciones id= {""} />
+                <h1 className="flex justify-center mt-10">Crear intervencion para el reporte {reporte.id}</h1>
+                <EditarIntervenciones intervenciones= {null} />
             <div>
             <div>
                 <List>
@@ -56,9 +27,7 @@ export default function IntervencionPage(props: { params: { reportesId: string }
                             <p>id: {intervencion.id}</p>
                             <p>descripcion: {intervencion.descripcion}</p>
                             <div className="flex gap-3">
-                                <Button onClick={() => updates(intervencion.id)}>
-                                Actualizar
-                                </Button>
+                            <EditarIntervenciones intervenciones= {intervencion} />
                                 <Button onClick={() => window.location.href = `/intervenciones/${intervencion.id}`}>
                                     ver intervencion
                                 </Button>
@@ -71,9 +40,6 @@ export default function IntervencionPage(props: { params: { reportesId: string }
                 </List>
             </div>
             <div className="flex justify-center p-10">
-                <Button onClick={creacion} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
-                    Crear intervenciones
-                </Button>
             </div>
             </div>
             </div>

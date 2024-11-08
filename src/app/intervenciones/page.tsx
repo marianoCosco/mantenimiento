@@ -3,11 +3,10 @@
 import { api } from "~/trpc/react"
 import { Button } from "../_components/ui/button"
 import { List } from "../_components/ui/list"
-import { Trash2Icon } from "lucide-react"
+import Link from "next/link"
 
 export default function Page() {
     const { data: intervenciones } = api.intervenciones.list.useQuery()
-    const { data:users } = api.usuarios.list.useQuery()
     
 
 
@@ -20,13 +19,15 @@ export default function Page() {
                     {intervenciones? intervenciones?.map((intervencion) => (
                         <div className="border border-black p-10" key={intervencion.id}>
                             <p>descripcion: {intervencion.descripcion}</p>
-                            <p>orden de trabajo:{intervencion.OTid}</p>
-                            <p>Usuario que intervino:{intervencion.userId}</p>
-                            <p>fecha de creacion:{intervencion.createdAt?.toLocaleDateString()}</p>
+                            <p>orden de trabajo:{intervencion.ordenesTrabajo?.title ?? "-"}</p>
+                            <p>Usuario que intervino:{intervencion.usuario?.nombre ?? "a"}</p>
+                            <p>fecha de creacion:{intervencion.createdAt?.toLocaleDateString() ?? "aS"}</p>
                             <div className="flex gap-3">
-                                <Button onClick={() => window.location.href = `/intervenciones/${intervencion.id}`}>
-                                    ver intervencion
-                                </Button>
+                            <Button asChild>
+                                <Link href={`/intervencionesId/${intervencion.id}`}>
+                                    Ver intervencion
+                                </Link>
+                            </Button>
                             </div>
                         </div>
                     )): <h1>no existen intervenciones</h1>}
