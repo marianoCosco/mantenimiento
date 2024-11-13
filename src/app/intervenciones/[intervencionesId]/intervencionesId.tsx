@@ -11,6 +11,7 @@ export default function IntervencionesIdPage(props: { params: { intervencionesId
     const ordenTrabajoId = intervencion?.ordenesTrabajo?.id;
     const { data: ordenDeTrabajo } = ordenTrabajoId? api.ordenesDeTrabajo.get.useQuery({ id: ordenTrabajoId }): { data: null };
     const { mutateAsync: updateOrdenDeTrabajo } = api.ordenesDeTrabajo.update.useMutation();
+    const {mutateAsync: createEvent } = api.events.create.useMutation();
 
     async function handleEstadoChange(nuevoEstado: "completada" | "cancelada") {
         if (ordenDeTrabajo) {
@@ -27,6 +28,30 @@ export default function IntervencionesIdPage(props: { params: { intervencionesId
                 estado: nuevoEstado,
             };
             await updateOrdenDeTrabajo(updatedOrdenDeTrabajo);
+        if(nuevoEstado = "completada"){
+            await createEvent({
+                description: `Intervencion aprobada: ${intervencion?.title}`,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                EquipoId: "",
+                ReporteId: "",
+                OTId: "",
+                intervencionId: intervencionesId,
+                type: "Finalización",
+            });
+        } else if(nuevoEstado = "cancelada") {
+            await createEvent({
+                description: `Intervencion cancelada: ${intervencion?.title}`,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                EquipoId: "",
+                ReporteId: "",
+                OTId: "",
+                intervencionId: intervencionesId,
+                type: "cancelada",
+            });
+        }
+        
     }
 }
 

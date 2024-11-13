@@ -9,6 +9,7 @@ export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: stri
     const ordenTrabajoId  =props.params.ordenTrabajoId;
     const {data: ordenDeTrabajo} = api.ordenesDeTrabajo.get.useQuery({id: ordenTrabajoId});
     const { mutateAsync: updateOrdenDeTrabajo } = api.ordenesDeTrabajo.update.useMutation();
+    const { mutateAsync: createEvent } = api.events.create.useMutation();
     async function handleEstadoChange(nuevoEstado: "pendiente" | "en proceso" | "completada" | "cancelada") {
         if (ordenDeTrabajo) {
             const updatedOrdenDeTrabajo = {
@@ -25,6 +26,31 @@ export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: stri
             };
     
             await updateOrdenDeTrabajo(updatedOrdenDeTrabajo);
+
+            // Crear un evento basado en el nuevo estado
+            if (nuevoEstado === "completada") {
+                await createEvent({
+                    description: `Orden de trabajo completada: ${ordenDeTrabajo.title}`,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    EquipoId: "",
+                    ReporteId: "",
+                    OTId: ordenDeTrabajo.id,
+                    intervencionId: "",
+                    type: "Finalización",
+                });
+            } else if (nuevoEstado === "cancelada") {
+                await createEvent({
+                    description: `Orden de trabajo cancelada: ${ordenDeTrabajo.title}`,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    EquipoId: "",
+                    ReporteId: "",
+                    OTId: ordenDeTrabajo.id,
+                    intervencionId: "",
+                    type: "Cancelacion",
+                });
+            }
         }
     }
 

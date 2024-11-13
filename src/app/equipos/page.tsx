@@ -21,6 +21,7 @@ export default function Page() {
     const [qrCode, setQrCode] = useState("")
     const [state, setState] = useState("")
     const [description, setDescription] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
     const openCreateDialog = () => {
         setIsEditMode(false)
         resetForm()  
@@ -47,6 +48,7 @@ export default function Page() {
         setOpenDialog(true)     
 }
     async function creacion() {
+        setIsLoading(true);
         await crearEquipo({
             name,
             qr_code: qrCode,
@@ -59,9 +61,11 @@ export default function Page() {
         })
         setOpenDialog(false) 
         resetForm() 
+        setIsLoading(false);
     }
     async function editar() {
         if (!selectedEquipoId) return
+        setIsLoading(true);
         await editarEquipo({
             id: selectedEquipoId,
             name,
@@ -75,6 +79,7 @@ export default function Page() {
         })
         setOpenDialog(false)
         resetForm()
+        setIsLoading(false);
     }
     async function borrar(id: string) {
         await deleteEquipo({id})
@@ -92,7 +97,7 @@ export default function Page() {
             <h1 className="flex justify-center mt-10">Equipos</h1>
             <div>
                 <div className="flex justify-center p-10">
-                    <Button onClick={openCreateDialog} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700">
+                    <Button onClick={openCreateDialog} className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700" disabled={isLoading} >
                         Crear equipo
                     </Button>
                     <Dialog open={openDialog} onOpenChange={setOpenDialog}>

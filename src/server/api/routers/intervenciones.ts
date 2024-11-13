@@ -1,16 +1,10 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { intervenciones } from "~/server/db/schema";
-/*
-create FUNCIONA
-list FUNCIONA
-get PROBAR
-upload (se llama update) FUNCIONA
-delete FUNCIONA
-*/
+import { intervenciones, events } from "~/server/db/schema";
+
 export const intervencionesRouter = createTRPCRouter({
-  // create FUNCIONA
+  // Crear intervención y registrar evento de creación
   create: publicProcedure
     .input(
       z.object({
@@ -19,7 +13,7 @@ export const intervencionesRouter = createTRPCRouter({
         title: z.string(),
         descripcion: z.string(),
         createdAt: z.date(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const [respuesta] = await ctx.db
@@ -28,10 +22,18 @@ export const intervencionesRouter = createTRPCRouter({
         .returning();
 
       if (!respuesta) {
-        throw new Error("Error al crear intervenciones");
+        throw new Error("Error al crear intervención");
       }
 
-      return respuesta; 
+      await ctx.db.insert(events).values({
+        intervencionId: respuesta.id,
+        type: "Creación",
+        description: `intervencion creado: ${respuesta.title}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      return respuesta;
     }),
       // get FUNCIONA
   get: publicProcedure
@@ -94,6 +96,15 @@ export const intervencionesRouter = createTRPCRouter({
       if (!updatedIntervencion) {
         throw new Error("Error al actualizar la intervencion");
       }
+      
+      await ctx.db.insert(events).values({
+        intervencionId: updatedIntervencion.id,
+        type: "Actualizacion",
+        description: `intervencion actualizado: ${updatedIntervencion.title}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
 
       return updatedIntervencion;
     }),

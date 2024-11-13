@@ -2,37 +2,37 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { reportes } from "~/server/db/schema";
+import { events, reportes } from "~/server/db/schema";
 
-/*
-create FUNCIONA
-list FUNCIONA
-get PROBAR
-getByTeam PROBAR
-upload FUNCIONA
-delete FUNCIONA
-*/
 export const reportesRouter = createTRPCRouter({
-        //create FUNCIONA
+        // Crear reporte y registrar evento
     create: publicProcedure
     .input(
         z.object({
             equipo_id: z.string(),
             userId: z.string(),
-            tipo_reporte: z.enum(["intervencion realizada","estado del equipo"]),
+            tipo_reporte: z.enum(["intervencion realizada", "estado del equipo"]),
             descripcion: z.string(),
             createdAt: z.date(),
-            periodo: z.enum(["semanal","mensual","anual"]),
+            periodo: z.enum(["semanal", "mensual", "anual"]),
         })
     )
     .mutation(async ({ ctx, input }) => {
         const [reporte] = await ctx.db
-        .insert(reportes)
-        .values(input)
-        .returning();
+            .insert(reportes)
+            .values(input)
+            .returning();
         if (!reporte) {
             throw new Error("Error al crear reporte");
         }
+
+        await ctx.db.insert(events).values({
+            ReporteId: reporte.id,
+            type: "Creacion",
+            description: `reporte creado: ${reporte.id}`,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
         return reporte;
     }),
         //list FUNCIONA
@@ -79,36 +79,44 @@ export const reportesRouter = createTRPCRouter({
         })
         return reporte
     }),
-        //upload FUNCIONA
+        // Actualizar reporte y registrar evento de actualización
     upload: publicProcedure
     .input(
         z.object({
-            id: z.string(),
-            equipo_id: z.string(),
-            userId: z.string(),
-            tipo_reporte: z.enum(["intervencion realizada","estado del equipo"]),
-            descripcion: z.string(),
-            createdAt: z.date(),
-            periodo: z.enum(["semanal","mensual","anual"]),
+        id: z.string(),
+        equipo_id: z.string(),
+        userId: z.string(),
+        tipo_reporte: z.enum(["intervencion realizada", "estado del equipo"]),
+        descripcion: z.string(),
+        createdAt: z.date(),
+        periodo: z.enum(["semanal", "mensual", "anual"]),
         })
     )
     .mutation(async ({ ctx, input }) => {
         const [reporteActualizado] = await ctx.db
         .update(reportes)
         .set({
-            id: input.id,
             equipo_id: input.equipo_id,
             userId: input.userId,
             tipo_reporte: input.tipo_reporte,
             descripcion: input.descripcion,
             createdAt: input.createdAt,
             periodo: input.periodo,
-    })
+        })
         .where(eq(reportes?.id, input.id))
         .returning();
         if (!reporteActualizado) {
             throw new Error("Error al actualizar reporte");
         }
+        
+        await ctx.db.insert(events).values({
+            ReporteId: reporteActualizado.id,
+            type: "actualizado",
+            description: `reporte actualizado: ${reporteActualizado.id}`,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+
         return reporteActualizado;
     }),
         //delete FUNCIONA

@@ -3,48 +3,44 @@
 import { api } from "~/trpc/react";
 import { Button } from "../_components/ui/button";
 import { List } from "../_components/ui/list";
-import { Trash2Icon } from "lucide-react";
-import EditarEvento from "./edit";
 import Link from "next/link";
 
 export default function Page() {
-    const { data: events } = api.events.list.useQuery();
-    const { mutateAsync: deleteEvent } = api.events.delete.useMutation();
+    const { data: events } = api.events.list.useQuery()
 
-    async function deletes(id: string) {
-        await deleteEvent({ id });
-    }
 
     return (
         <div>
             <h1 className="flex justify-center mt-10">Eventos</h1>
-            <div className="flex justify-center p-10">
-                <EditarEvento evento={null} />
-            </div>
+            <div className="flex justify-center p-10"></div>
             <div>
                 <List>
-                    {events ? events.map((event) => (
-                        <div className="border border-black p-10" key={event.id}>
-                            <p>{event.type} - {event.description}</p>
-                            <p>Usuario: {event.equipos?.name}</p>
-                            <p>reporteId: {event.ReporteId ?? "---"}</p>
-                            <p>OTId: {event.OTId}</p>
-                            <p>intervencionId: {event.intervencionId}</p>
-                            <p>tipo: {event.type}</p>
-                            <p>Fecha: {event.ReporteId}</p>
-                            <div className="flex gap-3">
-                                <EditarEvento evento={event} />
-                                <Button asChild>
+                    {events && events.length > 0 ? (
+                        events.map((event) => (
+                            <div className="border border-black p-10 mb-4" key={event.id}>
+                                <p><strong>Tipo:</strong> {event.type}</p>
+                                <p><strong>Descripción:</strong> {event.description}</p>
+                                <p><strong>Usuario:</strong> {event.EquipoId ?? "Desconocido"}</p>
+                                <p><strong>Identificador:</strong> 
+                                    {
+                                    event.EquipoId? "equipo":
+                                    event.ReporteId? "reporte":
+                                    event.OTId? "ordenes de trabajo":
+                                    event.intervencionId? "intervencion":
+                                    "no se identifico"
+                                    }
+                                </p>
+                                <p><strong>Fecha:</strong> {event.createdAt ? new Date(event.createdAt).toLocaleDateString() : "Fecha no disponible"}</p>
+                                <div className="flex gap-3 mt-4">
                                     <Link href={`/events/${event.id}`}>
-                                        Ver evento
+                                        <Button>Ver evento</Button>
                                     </Link>
-                                </Button>
-                                <Button onClick={() => deletes(event.id)}>
-                                    <Trash2Icon />
-                                </Button>
+                                </div>
                             </div>
-                        </div>
-                    )) : "No existen eventos"}
+                        ))
+                    ) : (
+                        <p className="text-center">No existen eventos registrados</p>
+                    )}
                 </List>
             </div>
         </div>
