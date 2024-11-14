@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { events, reportes } from "~/server/db/schema";
+import { desc } from "drizzle-orm";
 
 export const reportesRouter = createTRPCRouter({
         // Crear reporte y registrar evento
@@ -38,14 +39,15 @@ export const reportesRouter = createTRPCRouter({
         //list FUNCIONA
     list: publicProcedure
     .query(async ({ctx}) => {
-        const reportes = await ctx.db.query.reportes.findMany({
+        const listReportes = await ctx.db.query.reportes.findMany({
+            orderBy: desc(reportes.createdAt),
             with: {
                 equipo: true,
                 usuario: true
             }
         })
 
-        return reportes
+        return listReportes
     }),
         //get PROBAR
     get: publicProcedure

@@ -16,8 +16,18 @@ export default function EventoPage(props: { params: { evento: evento } }) {
 
     return (
         <div>
-            <h1>evento:{evento?.EquipoId}</h1>
-            <p>q grande la banda</p>
+            <p>usuario: {evento?.EquipoId}</p>
+            <p>idenficador:{
+                                    evento.EquipoId? "equipo":
+                                    evento.ReporteId? "reporte":
+                                    evento.OTId? "ordenes de trabajo":
+                                    evento.intervencionId? "intervencion":
+                                    "no se identifico"
+                                    }</p>
+            <p>tipo:{evento?.type}</p>
+            <p>descripcion:{evento?.description}</p>
+            <p>fecha:{evento?.createdAt?.toLocaleDateString()}</p>
+
         </div>
     )
 

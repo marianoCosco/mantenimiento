@@ -1,5 +1,5 @@
 "use client";
-
+import type { RouterOutputs } from "~/trpc/react";
 import { api } from "~/trpc/react";
 import { Button } from "../_components/ui/button";
 import { useState, useEffect } from "react";
@@ -14,10 +14,11 @@ import { Select,
     SelectTrigger,
     SelectValue, } from "../_components/ui/select";
 
-export default function EditarOrdenTrabajo(params: {id:string}) {
-    
-    const id = params.id;
-    const {data: orden} = api.ordenesDeTrabajo.get.useQuery({id: id});
+    interface OrdenesTrabajoProps {
+        orden?: RouterOutputs["ordenesDeTrabajo"]["get"] | null;
+    }
+
+export default function EditarOrdenTrabajo({orden}: OrdenesTrabajoProps) {
     const { mutateAsync: createOrdenDeTrabajo } = api.ordenesDeTrabajo.create.useMutation();
     const { mutateAsync: updateOrdenDeTrabajo } = api.ordenesDeTrabajo.update.useMutation();
     const {data: users} = api.usuarios.list.useQuery();
@@ -50,7 +51,7 @@ async function handleSave() {
     try{
         if (orden) {
             await updateOrdenDeTrabajo({
-                id,
+                id : orden.id,
                 equipo_id: equipoId ?? "",
                 userId: userId ?? "",
                 title,
@@ -169,7 +170,7 @@ return (
                                     onClick={handleSave}
                                     className="bg-green-600 text-white rounded-lg px-4 py-2 hover:bg-green-700"
                                 >
-                                    {id ? "Guardar cambios" : "Crear"}
+                                    {orden ? "Guardar cambios" : "Crear"}
                                 </Button>
                                 <Button onClick={() => setOpenDialog(false)} className="bg-gray-300 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-400">
                                     Cerrar

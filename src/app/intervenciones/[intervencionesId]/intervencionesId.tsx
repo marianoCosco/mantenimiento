@@ -57,10 +57,10 @@ export default function IntervencionesIdPage(props: { params: { intervencionesId
 
     return (
         <div className="mt-4 border p-4">
-            <p>usuario que hizo la intervencion: {intervencion?.usuario?.nombre}</p>
-            <p>orden de trabajo: {intervencion?.ordenesTrabajo?.title}</p>
             <p>titulo: {intervencion?.title}</p>
             <p>descripcion: {intervencion?.descripcion}</p>
+            <p>usuario que hizo la intervencion: {intervencion?.usuario?.nombre}</p>
+            <p>orden de trabajo: {intervencion?.ordenesTrabajo?.title}</p>
             <p>fecha de creacion: {intervencion?.createdAt?.toDateString()}</p>
             <div>
             <Button onClick={() => handleEstadoChange("cancelada")}>

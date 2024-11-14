@@ -31,7 +31,7 @@ export default function Page() {
                                 <p>descripcion: {reporte.descripcion}</p>
                                 <p>equipo: {reporte.equipo?.name ?? "-"}</p>
                                 <p>fecha: {reporte.createdAt?.toLocaleDateString()}</p>
-                                <p>ot: {reporte.tipo_reporte}</p>
+                                <p>tipo de reporte: {reporte.tipo_reporte}</p>
                                 <div className="flex gap-4 items-center p-2 bg-gray-100 rounded-lg shadow-sm">
                                     <EditarReporte reporte={reporte} />
                                     <Button asChild >

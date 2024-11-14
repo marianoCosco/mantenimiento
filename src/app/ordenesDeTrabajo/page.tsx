@@ -25,7 +25,7 @@ export default function Page() {
     return (
         <div>
             <h1 className="flex justify-center mt-10">Órdenes de Trabajo</h1>
-                <EditarOrdenTrabajo id= {""} />
+                <EditarOrdenTrabajo orden= {null} />
             <div>
                 <List>
                     {ordenesDeTrabajo ? (
@@ -37,7 +37,7 @@ export default function Page() {
                                 <p>Estado: {orden.estado}</p>
                                 <p>usuario: {orden.usuario?.nombre}</p>
                                 <div className="flex gap-4 items-center p-2 bg-gray-100 rounded-lg shadow-sm">
-                                    <EditarOrdenTrabajo id= {orden.id} />
+                                    <EditarOrdenTrabajo orden= {orden} />
                                     <Button asChild>
                                         <Link href={`/ordenesDeTrabajo/${orden.id}`}>
                                             Ver orden de trabajo

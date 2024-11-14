@@ -1,6 +1,6 @@
 "use client";
-
-import { api, RouterOutputs } from "~/trpc/react";
+import type { RouterOutputs } from "~/trpc/react";
+import { api } from "~/trpc/react";
 import { Button } from "../../../_components/ui/button";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../../_components/ui/dialog";

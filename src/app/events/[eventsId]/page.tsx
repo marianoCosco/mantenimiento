@@ -13,7 +13,6 @@ export default function EventosPage(props: { params: { eventsId: string } }) {
         return (
             <div>
                 <p>Evento:</p>
-                <p>id: {evento?.id}</p>
                 <EventoPage params={{evento: evento}} />
             </div>
         )

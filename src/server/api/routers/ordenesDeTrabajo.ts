@@ -125,41 +125,8 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         if (!ordenActualizada) {
             throw new Error("Error al actualizar la orden de trabajo");
         }
-            // Registrar eventos en función del cambio de estado
-        if (ordenExistente.estado !== input.estado) {
-            console.log("registro automot")
-            let tipoEvento: string | null = null;
-            let descripcionEvento: string | null = null;
-            switch (input.estado) {
-                case "cancelada":
-                    tipoEvento = "Cancelación";
-                    descripcionEvento = `Orden de trabajo cancelada: ${ordenActualizada.title}`;
-                    break;
-                case "completada":
-                    tipoEvento = "Finalización";
-                    descripcionEvento = `Orden de trabajo completada: ${ordenActualizada.title}`;
-                    break;
-                case "en proceso":
-                    tipoEvento = "Inicio";
-                    descripcionEvento = `Orden de trabajo iniciada: ${ordenActualizada.title}`;
-                    break;
-                case "pendiente":
-                    tipoEvento = "Revisión";
-                    descripcionEvento = `Orden de trabajo marcada como pendiente: ${ordenActualizada.title}`;
-                    break;
-            }
-            if (tipoEvento && descripcionEvento) {
-                console.log("registro moto")
-                await ctx.db.insert(events).values({
-                    OTId: ordenActualizada.id,
-                    type: tipoEvento,
-                    description: descripcionEvento,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                })
-            };
         return ordenActualizada;
-    }}),
+    }),
 
         //delete FUNCIONA
     delete: publicProcedure

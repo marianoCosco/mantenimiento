@@ -15,11 +15,10 @@ export default function Page() {
                 <List>
                     {intervenciones? intervenciones?.map((intervencion) => (
                         <div className="border border-black p-10" key={intervencion.id}>
-                            <p>descripcion: {intervencion.descripcion}</p>
+                            <p>titulo: {intervencion.title}</p>
                             <p>orden de trabajo:{intervencion.ordenesTrabajo?.title}</p>
                             <p>Usuario que intervino:{intervencion.usuario?.nombre}</p>
                             <p>fecha de creacion:{intervencion.createdAt?.toLocaleDateString() ?? "aS"}</p>
-                            <p>estado de intervencion: {intervencion.ordenesTrabajo?.estado}</p>
                             <div className="flex gap-4 items-center p-2 bg-gray-100 rounded-lg shadow-sm">
                             <Button asChild>
                                 <Link href={`/intervenciones/${intervencion.id}`}>
