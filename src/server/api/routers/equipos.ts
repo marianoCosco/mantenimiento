@@ -87,7 +87,6 @@ export const equiposRouter = createTRPCRouter({
         })
         .where(eq(equipos.id, input.id))
         .returning();
-
       if (!updatedequipo) {
         throw new Error("Error al actualizar el equipo");
       }

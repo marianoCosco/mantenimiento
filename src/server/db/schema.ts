@@ -76,6 +76,7 @@ export const intervenciones = createTable(
   "intervenciones",
   {
     id:  text("id").primaryKey().notNull().$defaultFn(()=> nanoid()),
+    type: text("type", {enum:["Cancelación","Finalización","Avance"]}),
     userId: text("user_id").references(() => usuarios.id),
     OTid: text("ot_id").references(() => ordenesTrabajo.id),
     title: text("title"),
@@ -141,7 +142,7 @@ export const eventosUsuariosRelations = relations(events, ({one})=> ({
 }))
 
 // muchas ordenes de trabajo
-export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one }) => ({
+export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one,many }) => ({
   equipo: one(equipos, {
     fields: [ordenesTrabajo.equipo_id], 
     references: [equipos.id],
@@ -150,6 +151,7 @@ export const ordenTrabajoUsuariosRelations = relations(ordenesTrabajo, ({ one })
     fields: [ordenesTrabajo.userId],
     references: [usuarios.id],
   }),
+  intervenciones: many(intervenciones)
 }));
 
 export const intervencionesUsuariosRelations = relations(intervenciones, ({ one }) => ({

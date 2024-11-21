@@ -65,7 +65,9 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
             where: eq(ordenesTrabajo.id, input.id),
             with: {
                 equipo: true,
-                usuario: true}
+                usuario: true,
+                intervenciones: true,
+            }
         })
         return respuesta
     }),
@@ -78,7 +80,12 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
         const respuesta = await db.query.ordenesTrabajo.findMany({
-            where: eq(ordenesTrabajo.equipo_id, input.equipo_id)
+            where: eq(ordenesTrabajo.equipo_id, input.equipo_id),
+            with: {
+                equipo: true,
+                usuario: true,
+                intervenciones: true,
+            }
         })
         return respuesta
     }),
@@ -125,6 +132,25 @@ export const ordenesDeTrabajoRouter = createTRPCRouter({
         if (!ordenActualizada) {
             throw new Error("Error al actualizar la orden de trabajo");
         }
+            // Registrar evento de actualización
+            if(ordenActualizada.estado === "cancelada"){
+                await ctx.db.insert(events).values({
+                    OTId: ordenExistente.id,
+                    type: "Cancelada",
+                    description: `Orden de trabajo cancelad11111: ${ordenExistente.title}`,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+            }
+            if(ordenActualizada.estado === "completada"){
+                await ctx.db.insert(events).values({
+                    OTId: ordenExistente.id,
+                    type: "Completado",
+                    description: `Orden de trabajo completado11111: ${ordenExistente.title}`,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+            }
         return ordenActualizada;
     }),
 

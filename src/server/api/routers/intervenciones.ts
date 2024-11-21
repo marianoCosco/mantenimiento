@@ -1,13 +1,14 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { intervenciones, events } from "~/server/db/schema";
+import { intervenciones, events, ordenesTrabajo } from "~/server/db/schema";
 
 export const intervencionesRouter = createTRPCRouter({
   // Crear intervención y registrar evento de creación
   create: publicProcedure
     .input(
       z.object({
+        type: z.enum(["Finalización", "Cancelación", "Avance"]),
         userId: z.string(),
         OTid: z.string(),
         title: z.string(),
@@ -32,6 +33,39 @@ export const intervencionesRouter = createTRPCRouter({
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+      if(input.type === "Finalización"){
+        const [ordenTrabajo] =await ctx.db.update(ordenesTrabajo).set({
+          estado: "completada",
+          fecha_finalizacion: new Date(),
+        })
+        .where(eq(ordenesTrabajo.id, input.OTid))
+        .returning();
+
+        await ctx.db.insert(events).values({
+          intervencionId: respuesta.OTid,
+          type: "Finalización",
+          description: `orden finalizada: ${ordenTrabajo?.title}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+      }
+      if(input.type === "Cancelación"){
+        const [ordenTrabajo] = await ctx.db.update(ordenesTrabajo).set({
+          estado: "cancelada",
+          fecha_finalizacion: new Date(),
+        })
+        .where(eq(ordenesTrabajo.id, input.OTid))
+        .returning();
+        
+        await ctx.db.insert(events).values({
+          intervencionId: respuesta.OTid,
+          type: "Cancelación",
+          description: `orden cancelada: ${ordenTrabajo?.title}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+      }
+
 
       return respuesta;
     }),
@@ -72,6 +106,7 @@ export const intervencionesRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
+        type: z.enum(["Finalización", "Cancelación", "Avance"]),
         userId: z.string(),
         OTid: z.string(),
         title: z.string(),
@@ -84,6 +119,7 @@ export const intervencionesRouter = createTRPCRouter({
         .update(intervenciones)
         .set({
           id: input.id,
+          type: input.type,
           userId: input.userId,
           OTid: input.OTid,
           title: input.title,   

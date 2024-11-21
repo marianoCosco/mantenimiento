@@ -3,13 +3,15 @@
 import {api } from "~/trpc/react"
 import { Button } from "../../_components/ui/button";
 import OrdenTrabajoIdPage from "./ordenTrabajo"
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: string } }) {
 
     const ordenTrabajoId  =props.params.ordenTrabajoId;
+    
+    const queryClient = useQueryClient()
     const {data: ordenDeTrabajo} = api.ordenesDeTrabajo.get.useQuery({id: ordenTrabajoId});
     const { mutateAsync: updateOrdenDeTrabajo } = api.ordenesDeTrabajo.update.useMutation();
-    const { mutateAsync: createEvent } = api.events.create.useMutation();
     async function handleEstadoChange(nuevoEstado: "pendiente" | "en proceso" | "completada" | "cancelada") {
         if (ordenDeTrabajo) {
             const updatedOrdenDeTrabajo = {
@@ -26,52 +28,45 @@ export default function OrdenTrabajoPage(props: { params: { ordenTrabajoId: stri
             };
     
             await updateOrdenDeTrabajo(updatedOrdenDeTrabajo);
-
-            // Crear un evento basado en el nuevo estado
-            if (nuevoEstado === "completada") {
-                await createEvent({
-                    description: `Orden de trabajo completada: ${ordenDeTrabajo.title}`,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    EquipoId: "",
-                    ReporteId: "",
-                    OTId: ordenDeTrabajo.id,
-                    intervencionId: "",
-                    type: "Finalización",
-                });
-            } else if (nuevoEstado === "cancelada") {
-                await createEvent({
-                    description: `Orden de trabajo cancelada: ${ordenDeTrabajo.title}`,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    EquipoId: "",
-                    ReporteId: "",
-                    OTId: ordenDeTrabajo.id,
-                    intervencionId: "",
-                    type: "Cancelacion",
-                });
-            }
+            await queryClient.invalidateQueries();
+            
         }
     }
 
     if (!ordenDeTrabajo) return <p>Orden de trabajo no encontrada</p>;
         return (
-            <div className="p-6">
-                <h2 className="text-2xl font-semibold">Detalle de Orden de Trabajo</h2>
-                    <OrdenTrabajoIdPage params={{ordenTrabajoId: ordenDeTrabajo}} />
-                <div className="mt-4">
-                    <Button onClick={() => handleEstadoChange("en proceso")}>
-                        Comenzar OT
-                    </Button>
-                    <Button onClick={() => handleEstadoChange("cancelada")}>
-                        Cancelar OT
-                    </Button>
-                    {ordenDeTrabajo.estado === "en proceso" && (
-                        <Button onClick={() => handleEstadoChange("completada")}>
-                            Aprobar OT
-                        </Button>
-                    )}
-                </div>
-            </div>
+            <div className="p-6 flex flex-col items-center">
+    <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+        <OrdenTrabajoIdPage ordenTrabajo={ordenDeTrabajo} />
+    </div>
+    
+    <div className="mt-6 flex justify-center space-x-4">
+        {ordenDeTrabajo.estado !== "en proceso" && (
+            <Button
+                onClick={() => handleEstadoChange("en proceso")}
+                className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600"
+            >
+                Comenzar OT
+            </Button>
+        )}
+        {ordenDeTrabajo.estado !== "cancelada" && (
+            <Button
+                onClick={() => handleEstadoChange("cancelada")}
+                className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
+            >
+                Cancelar OT
+            </Button>
+        )}
+        
+        {ordenDeTrabajo.estado === "en proceso" && (
+            <Button
+                onClick={() => handleEstadoChange("completada")}
+                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
+            >
+                Aprobar OT
+            </Button>
+        )}
+    </div>
+</div>
         )
 }
