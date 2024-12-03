@@ -1,14 +1,10 @@
-import { useAuth, useUser } from "@clerk/nextjs";
-import { Roles } from "~/types/globals";
+import type { Roles } from "~/types/globals";
+import { useAuth } from "@clerk/nextjs";
 
-export const checkRole = (role: Roles) => {
+export const useCheckRole = (role: Roles) => {
   const { orgRole } = useAuth();
 
-  const user = useUser().user?.publicMetadata;
   console.log(orgRole, "test");
 
-  if (orgRole === role) return true;
-  else {
-    return false;
-  }
+  return orgRole === role;
 };
